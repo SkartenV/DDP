@@ -1,0 +1,30 @@
+En este GitHub se encuentran 2 carpetas: DDP_Experimentacion y DDP_Sintonizacion.
+- Si se quiere experimentar generando archivos de salida, abrir una terminal en la ruta de la carpeta DDP_Experimentacion.
+- Si se quiere sintonizar sin generar archivos de salida, abrir una terminal en la ruta de la carpeta DDP_Sintonizacion.
+
+Para compilar el algoritmo escribir el comando 'make' en la consola.
+Para ejecutar el algoritmo, se debe seguir la siguiente estructura:
+
+./DDP NombreInstancia Semilla Iteraciones_ILS Iteraciones_SA Iteraciones_CambioT Mov_Perturbacion Temp_inicial Factor_Enfr
+
+En donde:
+> NombreInstancia: Nombre de la instancia sin la extensión (por ejemplo: Set_A1_Cust_10_1)
+> Semilla: Número de semilla
+> Iteraciones_ILS: Iteraciones aplicadas al algoritmo Iterated Local Search
+> Iteraciones_SA: Iteraciones aplicadas al algoritmo Simulated Annealing
+> Iteraciones_CambioT: Iteraciones para modificar la temperatura
+> Mov_Perturbacion: Movimientos aplicados para la fase de Perturbacion
+> Temp_inicial: Temperatura inicial del algoritmo Simulated Annealing
+> Factor_Enf: Factor de enfriamiento del algoritmo Simulated Annealing
+
+Por ejemplo, para ejecutar el algoritmo se podría escribir lo siguiente en la consola:
+
+./DDP Set_A1_Cust_10_1 1 15 30000 100 3 50 0.99
+
+La siguiente combinación de parámetros se puede utilizar como base ya que me dió buenos resultados en las instancias probadas:
+> Iteraciones_ILS: 30
+> Iteraciones_SA: 30000
+> Iteraciones_CambioT: 100
+> Mov_Perturbacion: 6
+> Temp_inicial: 50
+> Factor_Enf: 0.99
