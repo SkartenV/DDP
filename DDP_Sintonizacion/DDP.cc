@@ -4110,7 +4110,6 @@ int main(int argc, char **argv){
     Rutas_ILS = IteratedLocalSearch(Rutas, &Tiempos, &Energias, &Pesos, &IteracionesTotales, &EstadisticasPerturbacion, &EstadisticasSA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion, NumRutas, DroneNum, Delta, Tipo, 0, &Temperaturas, &Calidades, &Evaluaciones, Iteraciones_ILS, Iteraciones_SA, Iteraciones_CambioT, Movimientos_Perturbacion, Temperatura_Inicial, Factor_Enfriamiento);
 
     GapPorcentual = 100*((abs(SolucionAutores - FuncionEvaluacion))/SolucionAutores);
-    cout << "Funcion Evaluacion obtenida: " << FuncionEvaluacion << endl;
     cout << fixed << setprecision(2) << GapPorcentual << endl;
 
     return 0;
