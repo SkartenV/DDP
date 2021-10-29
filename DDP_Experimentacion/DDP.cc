@@ -2777,7 +2777,7 @@ vector<int> DueTime, vector<float> Demand, float Capacidad, float CapacidadEnerg
 
 vector<vector<int>> Perturbacion(vector<vector<int>> Rutas, vector<vector<float>> *Tiempos,
 vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesTotales, vector<int> *EstadisticasPerturbacion, vector<int> X_coor, vector<int> Y_coor, vector<int> ReadyTime, vector<int> DueTime,
-vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, int CantidadMovimientos, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones){
+vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, int CantidadMovimientos, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion){
 
     int Movimiento, DenominadorExploracion = 3, ContadorIteraciones = 0, ContadorAceptacion = 0, IterTotal = *IteracionesTotales;
     float NewFuncionEvaluacion = 999999, Random, T_actual = 0;
@@ -2788,7 +2788,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
     vector<vector<float>> NewEnergias = *Energias;
     vector<vector<float>> NewPesos = *Pesos;
     vector<vector<float>> TiemposActuales, EnergiasActuales, PesosActuales;
-    vector<int> NodosSwap, RutaMovida, NumeradoresExploracion, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_Pert = *Evaluaciones;
+    vector<int> NodosSwap, RutaMovida, NumeradoresExploracion, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_Pert = *Evaluaciones, Flag_Perturbacion = *FlagPerturbacion;
     vector<float> ProbAcumuladasExploracion, ProbAcumuladasExplotacion, Temperaturas_Pert = *Temperaturas, Calidades_Pert = *Calidades;
    
     // Inicialización probabilidades acumuladas de los movimientos
@@ -2827,6 +2827,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Temperaturas_Pert.push_back(T_actual);
                 Calidades_Pert.push_back(NewFuncionEvaluacion);
                 Evaluaciones_Pert.push_back(IterTotal);
+                Flag_Perturbacion.push_back(1);
                 Factible = RestriccionesBalanceoCargaA1(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, RutaMovida, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
             }
            
@@ -2858,6 +2859,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
             Temperaturas_Pert.push_back(T_actual);
             Calidades_Pert.push_back(NewFuncionEvaluacion);
             Evaluaciones_Pert.push_back(IterTotal);
+            Flag_Perturbacion.push_back(1);
             TiemposActuales = NewTiempos;
             EnergiasActuales = NewEnergias;
             PesosActuales = NewPesos;
@@ -2888,6 +2890,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
             Temperaturas_Pert.push_back(T_actual);
             Calidades_Pert.push_back(NewFuncionEvaluacion);
             Evaluaciones_Pert.push_back(IterTotal);
+            Flag_Perturbacion.push_back(1);
             TiemposActuales = NewTiempos;
             EnergiasActuales = NewEnergias;
             PesosActuales = NewPesos;
@@ -2923,6 +2926,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
     *Temperaturas = Temperaturas_Pert;
     *Calidades = Calidades_Pert;
     *Evaluaciones = Evaluaciones_Pert;
+    *FlagPerturbacion = Flag_Perturbacion;
 
 
     return Rutas;
@@ -3801,7 +3805,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
 
 vector<vector<int>> SimulatedAnnealing(vector<vector<int>> Rutas, vector<vector<float>> *Tiempos,
 vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesTotales, vector<int> *EstadisticasSA, vector<int> X_coor, vector<int> Y_coor, vector<int> ReadyTime, vector<int> DueTime,
-vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones,
+vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
 int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Factor_Enfriamiento){
 
     int NumRutasActual, Movimiento, DenominadorExplotacion = 5, ContadorIteraciones = 0, ContadorCambioTemp = 0, ContadorFaseExploracion = 0, IterTotal = *IteracionesTotales;
@@ -3812,8 +3816,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
     vector<vector<float>> NewTiempos = *Tiempos;
     vector<vector<float>> NewEnergias = *Energias;
     vector<vector<float>> NewPesos = *Pesos;
-    vector<vector<float>> TiemposActuales, EnergiasActuales, PesosActuales, MejorTiempos = NewTiempos, MejorEnergias = NewEnergias, MejorPesos = NewPesos;;
-    vector<int> NodosSwap, RutaMovida, NumeradoresExploracion, NumeradoresExplotacion, Estadisticas_SA = *EstadisticasSA, Evaluaciones_SA = *Evaluaciones;
+    vector<vector<float>> TiemposActuales, EnergiasActuales, PesosActuales, MejorTiempos = NewTiempos, MejorEnergias = NewEnergias, MejorPesos = NewPesos;
+    vector<int> NodosSwap, RutaMovida, NumeradoresExploracion, NumeradoresExplotacion, Estadisticas_SA = *EstadisticasSA, Evaluaciones_SA = *Evaluaciones, Flag_Perturbacion = *FlagPerturbacion;
     vector<float> ProbAcumuladasExploracion, ProbAcumuladasExplotacion, Temperaturas_SA = *Temperaturas, Calidades_SA = *Calidades;
    
     // Inicialización probabilidades acumuladas de los movimientos
@@ -3851,6 +3855,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
+                Flag_Perturbacion.push_back(0);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
@@ -3900,6 +3905,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
+                Flag_Perturbacion.push_back(0);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
@@ -3948,6 +3954,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
+                Flag_Perturbacion.push_back(0);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
@@ -3996,6 +4003,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
+                Flag_Perturbacion.push_back(0);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
@@ -4045,6 +4053,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
+                Flag_Perturbacion.push_back(0);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
@@ -4120,6 +4129,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
     *Temperaturas = Temperaturas_SA;
     *Calidades = Calidades_SA;
     *Evaluaciones = Evaluaciones_SA;
+    *FlagPerturbacion = Flag_Perturbacion;
 
     return Rutas;
 
@@ -4127,17 +4137,17 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
 
 vector<vector<int>> IteratedLocalSearch(vector<vector<int>> Rutas, vector<vector<float>> *Tiempos,
 vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesTotales, vector<int> *EstadisticasPerturbacion, vector<int> *EstadisticasSA, vector<int> X_coor, vector<int> Y_coor, vector<int> ReadyTime, vector<int> DueTime,
-vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones,
+vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
 int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimientos_Perturbacion, float Temperatura_Inicial, float Factor_Enfiramiento){
 
     int Contador = 0, Iteraciones_Totales = *IteracionesTotales;
     float FuncionEvaluacion_act = *FuncionEvaluacion, MejorFuncionEvaluacion;
-    vector<int> Estadisticas_SA = *EstadisticasSA, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_SA = *Evaluaciones;
+    vector<int> Estadisticas_SA = *EstadisticasSA, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_SA = *Evaluaciones, Flag_Perturbacion = *FlagPerturbacion;
     vector<float> Temperaturas_SA = *Temperaturas, Calidades_SA = *Calidades;
     vector<vector<int>> Solucion_Actual, Mejor_Solucion, Solucion_Perturbada, Solucion_SA;
     vector<vector<float>> Tiempos_act = *Tiempos, Energias_act = *Energias, Pesos_act = *Pesos, MejorTiempos, MejorEnergias, MejorPesos, TiemposRepaldo, EnergiasRespaldo, PesosRespaldo;
 
-    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
     Mejor_Solucion = Solucion_Actual;
     MejorFuncionEvaluacion = FuncionEvaluacion_act;
 
@@ -4150,11 +4160,11 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
         TiemposRepaldo = MejorTiempos;
         EnergiasRespaldo = MejorEnergias;
         PesosRespaldo = MejorPesos;
-        Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA);
+        Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion);
         Tiempos_act = MejorTiempos;
         Energias_act = MejorEnergias;
         Pesos_act = MejorPesos;
-        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
 
         if(FuncionEvaluacion_act < MejorFuncionEvaluacion){
             Mejor_Solucion = Solucion_SA;
@@ -4182,6 +4192,7 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
     *Temperaturas = Temperaturas_SA;
     *Calidades = Calidades_SA;
     *Evaluaciones = Evaluaciones_SA;
+    *FlagPerturbacion = Flag_Perturbacion;
 
     return Mejor_Solucion;
 
@@ -4210,7 +4221,7 @@ int main(int argc, char **argv){
     int CustNum, DroneNum, i, j, NumRutas, IteracionesTotales = 0;
     float FuncionEvaluacion;
     string NombreInstancia;
-    vector<int> NodeID, X_coor, Y_coor, ReadyTime, DueTime, NodosSwap, EstadisticasPerturbacion(6, 0), EstadisticasSA(10, 0), Iteraciones, VisitadosDrones, Evaluaciones;
+    vector<int> NodeID, X_coor, Y_coor, ReadyTime, DueTime, NodosSwap, EstadisticasPerturbacion(6, 0), EstadisticasSA(10, 0), Iteraciones, VisitadosDrones, Evaluaciones, FlagPerturbacion;
     vector<float> Demand, Tiempos_Nodos, Temperaturas, Calidades;
     vector<string> Movimientos;
     vector<vector<int>> Rutas, Rutas_SA, Rutas_ILS;
@@ -4223,7 +4234,7 @@ int main(int argc, char **argv){
 
     // Archivos de salida
     ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
-    ofstream CompilacionTemperaturas("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Temperaturas.out");
+    ofstream CompilacionTemperaturas("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Temperaturas.csv");
 
     Rutas = Greedy(NodeID, X_coor, Y_coor, ReadyTime, DueTime, Demand, &Tiempos, &TiemposEspera, &Energias, &Pesos, CustNum, DroneNum, Capacidad, CapacidadEnergetica, &NumRutas);
 
@@ -4278,7 +4289,7 @@ int main(int argc, char **argv){
     Salida << "------------------------------------------------------------------------------------------------------------\n\n";
     Salida << "Solución Iterated Local Search:\n\n";
    
-    Rutas_ILS = IteratedLocalSearch(Rutas, &Tiempos, &Energias, &Pesos, &IteracionesTotales, &EstadisticasPerturbacion, &EstadisticasSA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion, NumRutas, DroneNum, Delta, Tipo, 0, &Temperaturas, &Calidades, &Evaluaciones, Iteraciones_ILS, Iteraciones_SA, Iteraciones_CambioT, Movimientos_Perturbacion, Temperatura_Inicial, Factor_Enfriamiento);
+    Rutas_ILS = IteratedLocalSearch(Rutas, &Tiempos, &Energias, &Pesos, &IteracionesTotales, &EstadisticasPerturbacion, &EstadisticasSA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion, NumRutas, DroneNum, Delta, Tipo, 0, &Temperaturas, &Calidades, &Evaluaciones, &FlagPerturbacion, Iteraciones_ILS, Iteraciones_SA, Iteraciones_CambioT, Movimientos_Perturbacion, Temperatura_Inicial, Factor_Enfriamiento);
 
     Salida << "Función evaluación: ";
     Salida << trunc(FuncionEvaluacion*100)/100.0f;
@@ -4335,8 +4346,9 @@ int main(int argc, char **argv){
     Salida << "Apariciones CrearRuta: " + to_string(EstadisticasSA[6]) + "/" + to_string(EstadisticasSA[7]) + "\n";
     Salida << "Apariciones CrearRuta2: " + to_string(EstadisticasSA[8]) + "/" + to_string(EstadisticasSA[9]) + "\n\n";
 
+    CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
     for(i=0;i<(int)Temperaturas.size();i++)
-        CompilacionTemperaturas << to_string(Temperaturas[i]) + " " << to_string(Calidades[i]) + " " << to_string(Evaluaciones[i]) + "\n";
+        CompilacionTemperaturas << to_string(Evaluaciones[i]) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
     CompilacionTemperaturas.close();
 
     end = time(0);
