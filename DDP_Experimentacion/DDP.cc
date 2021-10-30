@@ -2805,11 +2805,11 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
 
     while(ContadorAceptacion < CantidadMovimientos){
 
-        IterTotal++;
-
         if(ContadorIteraciones == 5000)
             break;
 
+        IterTotal++;
+        
         // Se selecciona un número flotante al azar entre 0 y 1
         Random = float_rand(0,1);
         Movimiento = RuletaMovimientos(ProbAcumuladasExploracion, Random);
@@ -4347,8 +4347,12 @@ int main(int argc, char **argv){
     Salida << "Apariciones CrearRuta2: " + to_string(EstadisticasSA[8]) + "/" + to_string(EstadisticasSA[9]) + "\n\n";
 
     CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
-    for(i=0;i<(int)Temperaturas.size();i++)
-        CompilacionTemperaturas << to_string(Evaluaciones[i]) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
+    int iter=1;
+    for(i=0;i<(int)Temperaturas.size();i++){
+        if(iter % 1000 == 0)
+            CompilacionTemperaturas << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
+        iter++;
+    }
     CompilacionTemperaturas.close();
 
     end = time(0);

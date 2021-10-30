@@ -20,35 +20,35 @@ Pesos Drone 2: 1.5 1.3 0.69 0 1.5 0.9 0.49 0.19 0
 
 Solución Iterated Local Search:
 
-Función evaluación: 3044.63
+Función evaluación: 3140.14
 
-Rutas Drone 1: 0 1 9 0 8 6 0 10 11 
-Rutas Drone 2: 0 3 7 0 4 2 5 11 
+Rutas Drone 1: 0 1 9 0 2 8 0 10 11 
+Rutas Drone 2: 0 3 6 4 0 7 5 11 
 
-Tiempos Drone 1: 0 1169 1228.2 1567.2 1823 1881 1983.62 2238.84 2494.06 
-Tiempos Drone 2: 0 750 1205 1452.54 1543.8 1979 2421 2718.28 
+Tiempos Drone 1: 0 1169 1228.2 1567.2 2013.68 2319.05 2471.25 2726.47 2981.69 
+Tiempos Drone 2: 0 750 1000 1451 1542.26 1789.8 2421 2718.28 
 
-Energias Drone 1: 0 0.08 0.15 0.25 0.02 0.08 0.13 0.03 0.06 
-Energias Drone 2: 0 0.05 0.14 0.23 0.02 0.09 0.14 0.18 
+Energias Drone 1: 0 0.08 0.15 0.25 0.02 0.09 0.14 0.03 0.06 
+Energias Drone 2: 0 0.05 0.15 0.24 0.26 0.06 0.12 0.15 
 
-Pesos Drone 1: 1.5 0.8 0 1.5 0.7 0 1.5 0.39 0 
-Pesos Drone 2: 1.5 1.3 0.39 1.5 0.9 0.49 0.19 0 
+Pesos Drone 1: 1.5 0.8 0 1.5 1.1 0.3 1.5 0.39 0 
+Pesos Drone 2: 1.5 1.3 0.69 0 1.5 0.6 0.3 0 
 
 ------------------------------------------------------------------------------------------------------------
 
 Estadísticas:
 
-Iteraciones totales: 931491
+Iteraciones totales: 8558
 
-Apariciones BalanceoCargaA1: 8/363
-Apariciones BalanceoCargaA2: 44/385
-Apariciones BalanceoCargaB: 128/743
-Apariciones Swap: 5811/61169
-Apariciones MoverCliente: 132375/801643
-Apariciones MoverCliente2: 28/2621
-Apariciones CrearRuta: 6109/62606
-Apariciones CrearRuta2: 10/1961
+Apariciones BalanceoCargaA1: 7/156
+Apariciones BalanceoCargaA2: 20/201
+Apariciones BalanceoCargaB: 18/201
+Apariciones Swap: 125/1531
+Apariciones MoverCliente: 612/4225
+Apariciones MoverCliente2: 9/689
+Apariciones CrearRuta: 78/1001
+Apariciones CrearRuta2: 4/554
 
-Tiempo de ejecución: 265 segundos
+Tiempo de ejecución: 5 segundos
 
 ------------------------------------------------------------------------------------------------------------
