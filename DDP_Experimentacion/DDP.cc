@@ -4349,7 +4349,7 @@ int main(int argc, char **argv){
     CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
     int iter=1;
     for(i=0;i<(int)Temperaturas.size();i++){
-        if(iter % 1000 == 0)
+        if(iter % 1000 == 0 || FlagPerturbacion[i] == 1)
             CompilacionTemperaturas << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
         iter++;
     }
