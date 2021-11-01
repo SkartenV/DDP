@@ -4235,6 +4235,7 @@ int main(int argc, char **argv){
     // Archivos de salida
     ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
     ofstream CompilacionTemperaturas("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Temperaturas.csv");
+    // ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
 
     Rutas = Greedy(NodeID, X_coor, Y_coor, ReadyTime, DueTime, Demand, &Tiempos, &TiemposEspera, &Energias, &Pesos, CustNum, DroneNum, Capacidad, CapacidadEnergetica, &NumRutas);
 
