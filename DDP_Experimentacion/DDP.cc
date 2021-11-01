@@ -4235,7 +4235,7 @@ int main(int argc, char **argv){
     // Archivos de salida
     ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
     ofstream CompilacionTemperaturas("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Temperaturas.csv");
-    // ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
+    ofstream CompilacionMovimientos("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Movimientos.csv");
 
     Rutas = Greedy(NodeID, X_coor, Y_coor, ReadyTime, DueTime, Demand, &Tiempos, &TiemposEspera, &Energias, &Pesos, CustNum, DroneNum, Capacidad, CapacidadEnergetica, &NumRutas);
 
@@ -4346,6 +4346,17 @@ int main(int argc, char **argv){
     Salida << "Apariciones MoverCliente2: " + to_string(EstadisticasSA[4]) + "/" + to_string(EstadisticasSA[5]) + "\n";
     Salida << "Apariciones CrearRuta: " + to_string(EstadisticasSA[6]) + "/" + to_string(EstadisticasSA[7]) + "\n";
     Salida << "Apariciones CrearRuta2: " + to_string(EstadisticasSA[8]) + "/" + to_string(EstadisticasSA[9]) + "\n\n";
+
+    CompilacionMovimientos << "Movimiento" << ",Aceptados" << ",Totales" << "\n";
+    CompilacionMovimientos << "BalanceoCargaA1," + to_string(EstadisticasPerturbacion[0]) + "," + to_string(EstadisticasPerturbacion[1]) + "\n";
+    CompilacionMovimientos << "BalanceoCargaA2," + to_string(EstadisticasPerturbacion[2]) + "," + to_string(EstadisticasPerturbacion[3]) + "\n";
+    CompilacionMovimientos << "BalanceoCargaB," + to_string(EstadisticasPerturbacion[4]) + "," + to_string(EstadisticasPerturbacion[5]) + "\n";
+    CompilacionMovimientos << "Swap," + to_string(EstadisticasSA[0]) + "," + to_string(EstadisticasSA[1]) + "\n";
+    CompilacionMovimientos << "MoverCliente," + to_string(EstadisticasSA[2]) + "," + to_string(EstadisticasSA[3]) + "\n";
+    CompilacionMovimientos << "MoverCliente2," + to_string(EstadisticasSA[4]) + "," + to_string(EstadisticasSA[5]) + "\n";
+    CompilacionMovimientos << "CrearRuta," + to_string(EstadisticasSA[6]) + "," + to_string(EstadisticasSA[7]) + "\n";
+    CompilacionMovimientos << "CrearRuta2," + to_string(EstadisticasSA[8]) + "," + to_string(EstadisticasSA[9]) + "\n";
+    CompilacionMovimientos.close();
 
     CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
     int iter=1;
