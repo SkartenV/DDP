@@ -1,9 +1,9 @@
 Movimiento,Aceptados,Totales
-BalanceoCargaA1,1,48272
-BalanceoCargaA2,6,50069
-BalanceoCargaB,7,51659
-Swap,7251,227492
-MoverCliente,28796,356650
-MoverCliente2,16,115441
-CrearRuta,12,115577
-CrearRuta2,8,115305
+BalanceoCargaA1,2,46117
+BalanceoCargaA2,7,48082
+BalanceoCargaB,16,55801
+Swap,19833,283158
+MoverCliente,76045,461820
+MoverCliente2,26,62118
+CrearRuta,16,62910
+CrearRuta2,12,62071

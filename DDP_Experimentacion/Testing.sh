@@ -12,7 +12,7 @@ do
         NumeroInstancia=1
         while [ $NumeroInstancia -le 1 ]
         do
-            ./DDP Set_A1_Cust_"$NumeroClientes"_$NumeroInstancia $NumeroSemilla 30 30000 30 11 107 0.94
+            ./DDP Set_A1_Cust_"$NumeroClientes"_$NumeroInstancia $NumeroSemilla 30 30000 107 7 154 0.92
             let NumeroInstancia=$NumeroInstancia+1
         done
         let NumeroClientes=$NumeroClientes+5

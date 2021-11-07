@@ -866,12 +866,11 @@ vector<vector<int>> CrearRuta2(vector<vector<int>> Rutas, int *NumRutas, int Num
 }
 
 // Movimiento que mueve una ruta desde un drone ocupado a uno desocupado
-void BalanceoCargaA1(vector<vector<int>> *Rutas, int DroneNum, vector<int> *NodosSwap, vector<int> *RutaMovida){
+vector<vector<int>> BalanceoCargaA1(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosSwap, vector<int> *RutaMovida){
     int i, DroneOcupado, DroneDesocupado, MasVisitados = -1, MenosVisitados = 9999, ClienteSeleccionado, Contador = 0, Reintentos = 1000;
     int Posicion, NodoOrigen, NodoFinal, ValorCliente, InicioRuta, FinRuta, FlagBalanceo, FlagInfactible = 0;
 
-    vector<vector<int>> RutasAux = *Rutas;
-    vector<int> Ruta1, Ruta2, RutaMovidaAux, VisitadosDrones = ClientesDrones(RutasAux), NodosMover = *NodosSwap;
+    vector<int> Ruta1, Ruta2, RutaMovidaAux, VisitadosDrones = ClientesDrones(Rutas), NodosMover = *NodosSwap;
     NodosMover.clear();
     RutaMovida->clear();
 
@@ -905,15 +904,15 @@ void BalanceoCargaA1(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
     }
 
     if(DroneOcupado != DroneDesocupado){
-        Ruta1 = RutasAux[DroneOcupado];
-        Ruta2 = RutasAux[DroneDesocupado];
+        Ruta1 = Rutas[DroneOcupado];
+        Ruta2 = Rutas[DroneDesocupado];
         NodosMover.push_back(DroneOcupado);
         NodosMover.push_back(DroneDesocupado);
 
         // Se selecciona un cliente aleatoriamente del drone ocupado
         ClienteSeleccionado = int_rand(1, Ruta1.size()-1);
         NodoOrigen = Ruta1[0];
-        NodoFinal = RutasAux[DroneOcupado][Ruta1.size()-1];
+        NodoFinal = Rutas[DroneOcupado][Ruta1.size()-1];
 
         // El cliente seleccionado no puede tener al depósito a cada lado
         while(true){
@@ -1004,8 +1003,8 @@ void BalanceoCargaA1(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
             NodosMover.push_back(Posicion);
             NodosMover.push_back(FlagBalanceo);
 
-            RutasAux[DroneOcupado] = Ruta1;
-            RutasAux[DroneDesocupado] = Ruta2;
+            Rutas[DroneOcupado] = Ruta1;
+            Rutas[DroneDesocupado] = Ruta2;
 
             cout << "BalanceoCargaA1 => Drone1: " << DroneOcupado << " / Drone2: " << DroneDesocupado << " / InicioRuta: " << InicioRuta << " / FinRuta: " << FinRuta << " / Posicion: " << Posicion << " / Flag: " << FlagBalanceo << endl;
         }
@@ -1014,18 +1013,17 @@ void BalanceoCargaA1(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
     }
 
     *NodosSwap = NodosMover;
-    *Rutas = RutasAux;
+    return Rutas;
 
 }
 
 // Movimiento que mueve un cliente desde una ruta ocupada a una ruta desocupada
-void BalanceoCargaA2(vector<vector<int>> *Rutas, int DroneNum, vector<int> *NodosBalanceo){
+vector<vector<int>> BalanceoCargaA2(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosBalanceo){
 
     int i, NodoOrigen, NodoFinal, ClienteMovido, PrimerNodo, SegundoNodo, Drone1, Drone2, UnicoCliente = 0;
     int MasVisitados = -1, MenosVisitados = 9999;
 
-    vector<vector<int>> RutasAux = *Rutas;
-    vector<int> Ruta1, Ruta2, RutaAux1, RutaAux2, VisitadosDrones = ClientesDrones(RutasAux);
+    vector<int> Ruta1, Ruta2, RutaAux1, RutaAux2, VisitadosDrones = ClientesDrones(Rutas);
     NodosBalanceo->clear();
 
     // Se encuentra el drone más ocupado
@@ -1058,8 +1056,8 @@ void BalanceoCargaA2(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
     }
 
     if(Drone1 != Drone2){
-        Ruta1 = RutasAux[Drone1];
-        Ruta2 = RutasAux[Drone2];
+        Ruta1 = Rutas[Drone1];
+        Ruta2 = Rutas[Drone2];
         RutaAux1 = Ruta1;
         RutaAux2 = Ruta2;
 
@@ -1069,7 +1067,7 @@ void BalanceoCargaA2(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
         // Se selecciona el primer nodo aleatoriamente
         PrimerNodo = int_rand(1, Ruta1.size()-1);
         NodoOrigen = Ruta1[0];
-        NodoFinal = RutasAux[Drone1][Ruta1.size()-1];
+        NodoFinal = Rutas[Drone1][Ruta1.size()-1];
 
         // Verificar que el nodo seleccionado no sea el mismo al nodo origen
         while(true){
@@ -1100,24 +1098,23 @@ void BalanceoCargaA2(vector<vector<int>> *Rutas, int DroneNum, vector<int> *Nodo
         NodosBalanceo->push_back(UnicoCliente);
 
         cout << "BalanceoCargaA2 => Drone1: " << Drone1 << " / Drone2: " << Drone2 << " / NodoSeleccionado: " << ClienteMovido << " / Posicion: " << SegundoNodo << endl;
-        RutasAux[Drone1] = Ruta1;
-        RutasAux[Drone2] = Ruta2;
+        Rutas[Drone1] = Ruta1;
+        Rutas[Drone2] = Ruta2;
 
     }
 
-    *Rutas = RutasAux;
+    return Rutas;
 
 }
 
 // Movimiento que selecciona un cliente al azar de un drone ocupado y crea una ruta con ese cliente en una posición al azar dentro de un drone desocupado
-void BalanceoCargaB(vector<vector<int>> *Rutas, int NumRutas, int NumDrones, vector<int> *NodosBalanceo){
+vector<vector<int>> BalanceoCargaB(vector<vector<int>> Rutas, int NumRutas, int NumDrones, vector<int> *NodosBalanceo){
 
     int i, NodoOrigen, NodoFinal, NodoSeleccionado, Posicion, Drone1, Drone2, FlagCortar, UnicoCliente = 0;
     int MasVisitados = -1, MenosVisitados = 9999;
     NodosBalanceo->clear();
 
-    vector<vector<int>> RutasAux = *Rutas;
-    vector<int> Ruta1, Ruta2, RutaAux1, RutaAux2, RutaExtra, VisitadosDrones = ClientesDrones(RutasAux);
+    vector<int> Ruta1, Ruta2, RutaAux1, RutaAux2, VisitadosDrones = ClientesDrones(Rutas);
 
     // Se encuentra el drone más ocupado
     for(i=0; i<(int)VisitadosDrones.size(); i++){
@@ -1149,8 +1146,8 @@ void BalanceoCargaB(vector<vector<int>> *Rutas, int NumRutas, int NumDrones, vec
     }
 
     if(Drone1 != Drone2){
-        Ruta1 = RutasAux[Drone1];
-        Ruta2 = RutasAux[Drone2];
+        Ruta1 = Rutas[Drone1];
+        Ruta2 = Rutas[Drone2];
         RutaAux1 = Ruta1;
         RutaAux2 = Ruta2;
 
@@ -1160,7 +1157,7 @@ void BalanceoCargaB(vector<vector<int>> *Rutas, int NumRutas, int NumDrones, vec
         // Se selecciona el primer nodo aleatoriamente
         NodoSeleccionado = int_rand(1, Ruta1.size()-1);
         NodoOrigen = Ruta1[0];
-        NodoFinal = RutasAux[Drone1][Ruta1.size()-1];
+        NodoFinal = Rutas[Drone1][Ruta1.size()-1];
 
         // Verificar que el nodo seleccionado no sea el mismo al nodo origen
         while(true){
@@ -1208,17 +1205,19 @@ void BalanceoCargaB(vector<vector<int>> *Rutas, int NumRutas, int NumDrones, vec
         }
 
         cout << "BalanceoCargaB => " << "Drone1: " << Drone1 << " / Drone2: " << Drone2 << " / NodoSeleccionado: " << Ruta1[NodoSeleccionado] << " / Posicion: " << Posicion << " / UnicoCliente: " << UnicoCliente << endl;
+
         NodosBalanceo->push_back(Posicion);
         NodosBalanceo->push_back(FlagCortar);
         NodosBalanceo->push_back(UnicoCliente);
 
         Ruta1 = RutaAux1;
         Ruta2 = RutaAux2;
-        RutasAux[Drone1] = Ruta1;
-        RutasAux[Drone2] = Ruta2;
+        Rutas[Drone1] = Ruta1;
+        Rutas[Drone2] = Ruta2;
+
     }
 
-    *Rutas = RutasAux;
+    return Rutas;
 
 }
 
@@ -2783,7 +2782,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
     float NewFuncionEvaluacion = 999999, Random, T_actual = 0;
     bool Factible = false;
 
-    vector<vector<int>> RutasAnteriores;
+    vector<vector<int>> RutasAnteriores, RutasOperador;
     vector<vector<float>> NewTiempos = *Tiempos;
     vector<vector<float>> NewEnergias = *Energias;
     vector<vector<float>> NewPesos = *Pesos;
@@ -2817,18 +2816,17 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
         // Movimiento: BalanceoCargaA1
         if(Movimiento == 0){
             Estadisticas_Perturbacion[1]++;
-            RutasAnteriores = Rutas;
-            BalanceoCargaA1(&Rutas, NumRutas, &NodosSwap, &RutaMovida);
+            RutasOperador = BalanceoCargaA1(Rutas, NumRutas, &NodosSwap, &RutaMovida);
             TiemposActuales = NewTiempos;
             EnergiasActuales = NewEnergias;
             PesosActuales = NewPesos;
             if(NodosSwap[2] != -1){
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_Pert.push_back(T_actual);
                 Calidades_Pert.push_back(NewFuncionEvaluacion);
                 Evaluaciones_Pert.push_back(IterTotal);
                 Flag_Perturbacion.push_back(1);
-                Factible = RestriccionesBalanceoCargaA1(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, RutaMovida, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                Factible = RestriccionesBalanceoCargaA1(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, RutaMovida, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
             }
            
             else{
@@ -2841,21 +2839,20 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Estadisticas_Perturbacion[0]++;
                 *FuncionEvaluacion = NewFuncionEvaluacion;
                 ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                Rutas = RutasOperador;
             }
             else{
                 NewTiempos = TiemposActuales;
                 NewEnergias = EnergiasActuales;
                 NewPesos = PesosActuales;
-                Rutas = RutasAnteriores;
             }
         }
 
         // Movimiento: BalanceoCargaA2
         else if(Movimiento == 1){
             Estadisticas_Perturbacion[3]++;
-            RutasAnteriores = Rutas;
-            BalanceoCargaA2(&Rutas, NumRutas, &NodosSwap);
-            NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
+            RutasOperador = BalanceoCargaA2(Rutas, NumRutas, &NodosSwap);
+            NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
             Temperaturas_Pert.push_back(T_actual);
             Calidades_Pert.push_back(NewFuncionEvaluacion);
             Evaluaciones_Pert.push_back(IterTotal);
@@ -2863,7 +2860,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
             TiemposActuales = NewTiempos;
             EnergiasActuales = NewEnergias;
             PesosActuales = NewPesos;
-            Factible = RestriccionesBalanceoCargaA2(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+            Factible = RestriccionesBalanceoCargaA2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
             if(Factible){
                 cout << "Movimiento aplicado: BalanceoCargaA2" << endl;
@@ -2871,22 +2868,21 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Estadisticas_Perturbacion[2]++;
                 *FuncionEvaluacion = NewFuncionEvaluacion;
                 ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                Rutas = RutasOperador;
             }
 
             else{
                 NewTiempos = TiemposActuales;
                 NewEnergias = EnergiasActuales;
                 NewPesos = PesosActuales;
-                Rutas = RutasAnteriores;
             }
         }
 
         // Movimiento: BalanceoCargaB
         else if(Movimiento == 2){
             Estadisticas_Perturbacion[5]++;
-            RutasAnteriores = Rutas;
-            BalanceoCargaB(&Rutas, NumRutas, NumDrones, &NodosSwap);
-            NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
+            RutasOperador = BalanceoCargaB(Rutas, NumRutas, NumDrones, &NodosSwap);
+            NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
             Temperaturas_Pert.push_back(T_actual);
             Calidades_Pert.push_back(NewFuncionEvaluacion);
             Evaluaciones_Pert.push_back(IterTotal);
@@ -2894,7 +2890,7 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
             TiemposActuales = NewTiempos;
             EnergiasActuales = NewEnergias;
             PesosActuales = NewPesos;
-            Factible = RestriccionesBalanceoCargaB(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+            Factible = RestriccionesBalanceoCargaB(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
             if(Factible){
                 cout << "Movimiento aplicado: BalanceoCargaB" << endl;
@@ -2902,13 +2898,13 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Estadisticas_Perturbacion[4]++;
                 *FuncionEvaluacion = NewFuncionEvaluacion;
                 ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                Rutas = RutasOperador;
             }
 
             else{
                 NewTiempos = TiemposActuales;
                 NewEnergias = EnergiasActuales;
                 NewPesos = PesosActuales;
-                Rutas = RutasAnteriores;
             }
         }
        
@@ -3455,14 +3451,13 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
             // Movimiento: BalanceoCargaA1
             if(Random >= 0 && Random < 0.33){
                 TotalBalanceoCargaA1++;
-                RutasAnteriores = Rutas;
-                BalanceoCargaA1(&Rutas, NumRutas, &NodosSwap, &RutaMovida);
+                RutasOperador = BalanceoCargaA1(Rutas, NumRutas, &NodosSwap, &RutaMovida);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
                 if(NodosSwap[2] != -1){
-                    NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
-                    Factible = RestriccionesBalanceoCargaA1(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, RutaMovida, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                    Factible = RestriccionesBalanceoCargaA1(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, RutaMovida, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
                 }
 
                 else{
@@ -3470,40 +3465,38 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 }
 
                 if(Factible){
-                    cout << "Movimiento aplicado: BalanceoCargaA1" << endl;
                     UsoBalanceoCargaA1++;
                     Movimientos->push_back("BalanceoCargaA1");
                     Iteraciones->push_back(cont);
                     *FuncionEvaluacion = NewFuncionEvaluacion;
                     ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                    Rutas = RutasOperador;
                 }
                 else{
                     RechazoBalanceoCargaA1++;
                     NewTiempos = TiemposActuales;
                     NewEnergias = EnergiasActuales;
                     NewPesos = PesosActuales;
-                    Rutas = RutasAnteriores;
                 }
             }
 
             // Movimiento: BalanceoCargaA2
             else if(Random >= 0.33 && Random < 0.66){
                 TotalBalanceoCargaA2++;
-                RutasAnteriores = Rutas;
-                BalanceoCargaA2(&Rutas, NumRutas, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = BalanceoCargaA2(Rutas, NumRutas, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
-                Factible = RestriccionesBalanceoCargaA2(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                Factible = RestriccionesBalanceoCargaA2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(Factible){
-                    cout << "Movimiento aplicado: BalanceoCargaA2" << endl;
                     UsoBalanceoCargaA2++;
                     Movimientos->push_back("BalanceoCargaA2");
                     Iteraciones->push_back(cont);
                     *FuncionEvaluacion = NewFuncionEvaluacion;
                     ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                    Rutas = RutasOperador;
                 }
 
                 else{
@@ -3511,28 +3504,26 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                     NewTiempos = TiemposActuales;
                     NewEnergias = EnergiasActuales;
                     NewPesos = PesosActuales;
-                    Rutas = RutasAnteriores;
                 }
             }
 
             // Movimiento: BalanceoCargaB
             else if(Random >= 0.66 && Random <= 1){
                 TotalBalanceoCargaB++;
-                RutasAnteriores = Rutas;
-                BalanceoCargaB(&Rutas, NumRutas, NumDrones, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = BalanceoCargaB(Rutas, NumRutas, NumDrones, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
                 TiemposActuales = NewTiempos;
                 EnergiasActuales = NewEnergias;
                 PesosActuales = NewPesos;
-                Factible = RestriccionesBalanceoCargaB(Rutas, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                Factible = RestriccionesBalanceoCargaB(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(Factible){
-                    cout << "Movimiento aplicado: BalanceoCargaB" << endl;
                     UsoBalanceoCargaB++;
                     Movimientos->push_back("BalanceoCargaB");
                     Iteraciones->push_back(cont);
                     *FuncionEvaluacion = NewFuncionEvaluacion;
                     ProbAcumuladasExploracion = ActualizarProbabilidades(&NumeradoresExploracion, &DenominadorExploracion, Movimiento);
+                    Rutas = RutasOperador;
                 }
 
                 else{
@@ -3540,7 +3531,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                     NewTiempos = TiemposActuales;
                     NewEnergias = EnergiasActuales;
                     NewPesos = PesosActuales;
-                    Rutas = RutasAnteriores;
                 }
             }
 
@@ -3574,7 +3564,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Factible = RestriccionesSwap(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    cout << "Movimiento aplicado: Swap" << endl;
                     UsoSwap++;
                     Movimientos->push_back("Swap");
                     Iteraciones->push_back(cont);
@@ -3612,7 +3601,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Factible = RestriccionesMover(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    cout << "Movimiento aplicado: MoverCliente" << endl;
                     UsoMoverCliente++;
                     Movimientos->push_back("MoverCliente");
                     Iteraciones->push_back(cont);
@@ -3650,7 +3638,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Factible = RestriccionesMover2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
-                    cout << "Movimiento aplicado: MoverCliente2" << endl;
                     UsoMoverCliente2++;
                     Movimientos->push_back("MoverCliente2");
                     Iteraciones->push_back(cont);
@@ -3688,7 +3675,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Factible = RestriccionesCrear(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    cout << "Movimiento aplicado: CrearRuta" << endl;
                     UsoCrearRuta++;
                     Movimientos->push_back("CrearRuta");
                     Iteraciones->push_back(cont);
@@ -3727,7 +3713,6 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
                 Factible = RestriccionesCrear2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
                 if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
-                    cout << "Movimiento aplicado: CrearRuta2" << endl;
                     UsoCrearRuta2++;
                     Movimientos->push_back("CrearRuta2");
                     Iteraciones->push_back(cont);
@@ -3805,10 +3790,10 @@ vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *Funcion
 
 vector<vector<int>> SimulatedAnnealing(vector<vector<int>> Rutas, vector<vector<float>> *Tiempos,
 vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesTotales, vector<int> *EstadisticasSA, vector<int> X_coor, vector<int> Y_coor, vector<int> ReadyTime, vector<int> DueTime,
-vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
+vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int *NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
 int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Factor_Enfriamiento){
 
-    int NumRutasActual, Movimiento, DenominadorExplotacion = 5, ContadorIteraciones = 0, ContadorCambioTemp = 0, ContadorFaseExploracion = 0, IterTotal = *IteracionesTotales;
+    int NumRutas_SA = *NumRutas, NumRutasActual, Movimiento, DenominadorExplotacion = 5, ContadorIteraciones = 0, ContadorCambioTemp = 0, ContadorFaseExploracion = 0, IterTotal = *IteracionesTotales;
     float NewFuncionEvaluacion = 999999, Random, ProbabilidadAceptacion, MejorFuncionEvaluacion = *FuncionEvaluacion;
     bool Factible = false;
 
@@ -3843,6 +3828,9 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
 
             IterTotal++;
 
+            // if(T_actual == 0)
+            //     T_actual = Temperatura_Inicial;
+
             // Se selecciona un número flotante al azar entre 0 y 1
             Random = float_rand(0,1);
             Movimiento = RuletaMovimientos(ProbAcumuladasExplotacion, Random);
@@ -3850,8 +3838,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             // Movimiento: Swap
             if(Movimiento == 0){
                 Estadisticas_SA[1]++;
-                RutasOperador = Swap(Rutas, NumRutas, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = Swap(Rutas, NumRutas_SA, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
@@ -3900,8 +3888,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             // Movimiento: MoverCliente
             else if(Movimiento == 1){
                 Estadisticas_SA[3]++;
-                RutasOperador = MoverCliente(Rutas, NumRutas, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = MoverCliente(Rutas, NumRutas_SA, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
@@ -3949,8 +3937,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             // Movimiento: MoverCliente2
             else if(Movimiento == 2){
                 Estadisticas_SA[5]++;
-                RutasOperador = MoverCliente2(Rutas, NumRutas, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = MoverCliente2(Rutas, NumRutas_SA, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
@@ -3998,8 +3986,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             // Movimiento: CrearRuta
             else if(Movimiento == 3){
                 Estadisticas_SA[7]++;
-                RutasOperador = CrearRuta(Rutas, NumRutas, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                RutasOperador = CrearRuta(Rutas, NumRutas_SA, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
@@ -4047,9 +4035,9 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             // Movimiento: CrearRuta2
             else if(Movimiento == 4){
                 Estadisticas_SA[9]++;
-                NumRutasActual = NumRutas;
-                RutasOperador = CrearRuta2(Rutas, &NumRutas, NumDrones, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas, X_coor, Y_coor, delta, tipo, q);
+                NumRutasActual = NumRutas_SA;
+                RutasOperador = CrearRuta2(Rutas, &NumRutas_SA, NumDrones, &NodosSwap);
+                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
                 Temperaturas_SA.push_back(T_actual);
                 Calidades_SA.push_back(NewFuncionEvaluacion);
                 Evaluaciones_SA.push_back(IterTotal);
@@ -4080,7 +4068,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
                     else{
-                        NumRutas = NumRutasActual;
+                        NumRutas_SA = NumRutasActual;
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
@@ -4089,7 +4077,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
 
                 // No es factible
                 else{
-                    NumRutas = NumRutasActual;
+                    NumRutas_SA = NumRutasActual;
                     NewTiempos = TiemposActuales;
                     NewEnergias = EnergiasActuales;
                     NewPesos = PesosActuales;
@@ -4130,6 +4118,7 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
     *Calidades = Calidades_SA;
     *Evaluaciones = Evaluaciones_SA;
     *FlagPerturbacion = Flag_Perturbacion;
+    *NumRutas = NumRutas_SA;
 
     return Rutas;
 
@@ -4140,14 +4129,14 @@ vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesT
 vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
 int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimientos_Perturbacion, float Temperatura_Inicial, float Factor_Enfiramiento){
 
-    int Contador = 0, Iteraciones_Totales = *IteracionesTotales;
+    int Contador = 0, Iteraciones_Totales = *IteracionesTotales, NumRutasRespaldo;
     float FuncionEvaluacion_act = *FuncionEvaluacion, MejorFuncionEvaluacion;
     vector<int> Estadisticas_SA = *EstadisticasSA, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_SA = *Evaluaciones, Flag_Perturbacion = *FlagPerturbacion;
     vector<float> Temperaturas_SA = *Temperaturas, Calidades_SA = *Calidades;
     vector<vector<int>> Solucion_Actual, Mejor_Solucion, Solucion_Perturbada, Solucion_SA;
     vector<vector<float>> Tiempos_act = *Tiempos, Energias_act = *Energias, Pesos_act = *Pesos, MejorTiempos, MejorEnergias, MejorPesos, TiemposRepaldo, EnergiasRespaldo, PesosRespaldo;
 
-    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
     Mejor_Solucion = Solucion_Actual;
     MejorFuncionEvaluacion = FuncionEvaluacion_act;
 
@@ -4160,11 +4149,12 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
         TiemposRepaldo = MejorTiempos;
         EnergiasRespaldo = MejorEnergias;
         PesosRespaldo = MejorPesos;
+        NumRutasRespaldo = NumRutas;
         Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion);
         Tiempos_act = MejorTiempos;
         Energias_act = MejorEnergias;
         Pesos_act = MejorPesos;
-        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
 
         if(FuncionEvaluacion_act < MejorFuncionEvaluacion){
             Mejor_Solucion = Solucion_SA;
@@ -4177,6 +4167,7 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
             MejorTiempos = TiemposRepaldo;
             MejorEnergias = EnergiasRespaldo;
             MejorPesos = PesosRespaldo;
+            NumRutas = NumRutasRespaldo;
         }
 
         Contador++;
@@ -4226,6 +4217,10 @@ int main(int argc, char **argv){
     vector<string> Movimientos;
     vector<vector<int>> Rutas, Rutas_SA, Rutas_ILS;
     vector<vector<float>> Tiempos, TiemposEspera, Energias, Pesos;
+
+    // Seed = 5, Iteraciones_ILS = 30, Iteraciones_SA = 30000, Iteraciones_CambioT = 163, Movimientos_Perturbacion = 10;
+    // Temperatura_Inicial = 121, Factor_Enfriamiento = 1;
+    // Instancia = "Set_A1_Cust_45_1";
 
     NombreInstancia.append(Instancia);
 
@@ -4361,7 +4356,7 @@ int main(int argc, char **argv){
     CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
     int iter=1;
     for(i=0;i<(int)Temperaturas.size();i++){
-        if(iter % 1000 == 0 || FlagPerturbacion[i] == 1)
+        if(iter % 1000 == 0)//|| FlagPerturbacion[i] == 1)
             CompilacionTemperaturas << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
         iter++;
     }

@@ -24,43 +24,43 @@ Pesos Drone 3: 1.5 0.9 0.49 0 0
 
 Solución Iterated Local Search:
 
-Función evaluación: 10643.6
+Función evaluación: 10606.6
 
-Rutas Drone 1: 0 20 0 17 7 0 10 23 0 15 0 14 0 18 0 25 26 
-Rutas Drone 2: 0 21 0 24 6 19 0 16 5 0 4 3 1 0 12 26 
+Rutas Drone 1: 0 20 0 17 0 23 10 7 0 15 0 18 0 25 0 14 26 
+Rutas Drone 2: 0 21 0 19 6 24 0 16 0 5 11 1 3 0 12 26 
 Rutas Drone 3: 0 22 9 2 26 
-Rutas Drone 4: 0 11 8 0 13 26 
+Rutas Drone 4: 0 13 4 0 8 26 
 
-Tiempos Drone 1: 0 337 673.47 1158.5 1808 2129.9 2493.57 2805.18 3172.49 4280 4613.72 5012 5220.86 5466.72 5712.59 6148.18 6583.78 
-Tiempos Drone 2: 0 405 809.1 1259.15 1400.1 1582.33 1878.31 2209.35 3409 3735.19 4056.87 4591 4870.86 5461.22 5741.83 6022.45 
+Tiempos Drone 1: 0 337 673.47 1158.5 1643.52 2010.83 2322.45 2495.73 2817.64 4280 4613.72 4859.58 5105.44 5541.04 5976.64 6185.51 6394.37 
+Tiempos Drone 2: 0 405 809.1 1105.08 1287.32 1428.26 1878.31 2209.35 2540.4 3409 3527.29 3725 4591 5053.8 5334.41 5615.03 
 Tiempos Drone 3: 0 458 1587 4674 5158.92 
-Tiempos Drone 4: 0 3084 4477 4864.95 5238.03 5611.12 
+Tiempos Drone 4: 0 3745 3867.06 4188.73 4576.68 4964.64 
 
-Energias Drone 1: 0 0.07 0.15 0.12 0.15 0.19 0.05 0.15 0.22 0 0.05 0.01 0.07 0.03 0.07 0.02 0.11 
-Energias Drone 2: 0 0.12 0.17 0.12 0.16 0.19 0.24 0.13 0.23 0.24 0.06 0.08 0.14 0.17 0.05 0.08 
+Energias Drone 1: 0 0.13 0.18 0.1 0.13 0.04 0.09 0.18 0.25 0 0.05 0.01 0.07 0.03 0.07 0.02 0.11 
+Energias Drone 2: 0 0.12 0.17 0.13 0.18 0.21 0.26 0.13 0.2 0.01 0.06 0.08 0.14 0.17 0.05 0.08 
 Energias Drone 3: 0 0.13 0.17 0.26 0.26 
-Energias Drone 4: 0 0.13 0.18 0.26 0.12 0.2 
+Energias Drone 4: 0 0.12 0.15 0.23 0.12 0.2 
 
-Pesos Drone 1: 1.5 0 1.5 0.29 0.19 1.5 0.8 0.1 1.5 0.1 1.5 0 1.5 0.39 1.5 0.1 0 
-Pesos Drone 2: 1.5 0.9 1.5 0.9 0.39 0.19 1.5 1.2 0.9 1.5 0.9 0.49 0.29 1.5 1.1 0 
+Pesos Drone 1: 1.5 0 1.5 0.29 1.5 0.8 0.1 0 1.5 0.1 1.5 0.39 1.5 0.1 1.5 0 0 
+Pesos Drone 2: 1.5 0.9 1.5 1.3 0.79 0.19 1.5 1.2 1.5 1.2 0.6 0.4 0 1.5 1.1 0 
 Pesos Drone 3: 1.5 0.9 0.49 0 0 
-Pesos Drone 4: 1.5 0.9 0.39 1.5 1.2 0 
+Pesos Drone 4: 1.5 1.2 0.6 1.5 1 0 
 
 ------------------------------------------------------------------------------------------------------------
 
 Estadísticas:
 
-Iteraciones totales: 1080465
+Iteraciones totales: 1082077
 
-Apariciones BalanceoCargaA1: 0/48751
-Apariciones BalanceoCargaA2: 1/49848
-Apariciones BalanceoCargaB: 1/51401
-Apariciones Swap: 5637/249094
-Apariciones MoverCliente: 28377/611632
-Apariciones MoverCliente2: 15/12467
-Apariciones CrearRuta: 1017/45266
-Apariciones CrearRuta2: 4/12006
+Apariciones BalanceoCargaA1: 0/48807
+Apariciones BalanceoCargaA2: 1/50023
+Apariciones BalanceoCargaB: 1/51170
+Apariciones Swap: 16222/396853
+Apariciones MoverCliente: 28399/390458
+Apariciones MoverCliente2: 24/10775
+Apariciones CrearRuta: 18181/124116
+Apariciones CrearRuta2: 8/9875
 
-Tiempo de ejecución: 422 segundos
+Tiempo de ejecución: 314 segundos
 
 ------------------------------------------------------------------------------------------------------------
