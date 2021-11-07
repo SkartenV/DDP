@@ -28,43 +28,43 @@ Pesos Drone 4: 1.5 0.6 0.3 0
 
 Solución Iterated Local Search:
 
-Función evaluación: 9022.68
+Función evaluación: 9075.01
 
-Rutas Drone 1: 0 20 0 18 0 19 0 10 7 1 0 13 21 
-Rutas Drone 2: 0 14 3 6 11 0 5 8 21 
-Rutas Drone 3: 0 12 0 2 16 0 15 21 
-Rutas Drone 4: 0 17 9 0 4 21 
+Rutas Drone 1: 0 18 0 19 11 0 1 7 0 13 21 
+Rutas Drone 2: 0 3 0 6 5 0 9 21 
+Rutas Drone 3: 0 10 4 0 15 21 
+Rutas Drone 4: 0 12 0 17 14 0 20 0 16 2 0 8 21 
 
-Tiempos Drone 1: 0 341 512.75 848.77 1184.78 1577.39 1970.01 2290.06 2481.14 2726 3167.1 3754 4062.02 
-Tiempos Drone 2: 0 289 412.14 676.72 879.39 1287.47 1830.13 2566 2655.19 
-Tiempos Drone 3: 0 171 341.6 1355 1416.22 1880.19 3026 3465.89 
-Tiempos Drone 4: 0 428 2026 2214.32 2378.39 2542.47 
+Tiempos Drone 1: 0 415 751.01 1143.62 1309.18 1717.26 2726 2839.75 3209.77 3754 4062.02 
+Tiempos Drone 2: 0 302 465 793 1235.29 1777.95 2026 2214.32 
+Tiempos Drone 3: 0 1349 2345 2509.07 3026 3465.89 
+Tiempos Drone 4: 0 171 341.6 596.17 620.86 894.95 1066.71 1238.47 1702.44 1763.66 2172.6 2566 2655.19 
 
-Energias Drone 1: 0 0.1 0.18 0.06 0.08 0.1 0.19 0.07 0.14 0.17 0.24 0.06 0.12 
-Energias Drone 2: 0 0.09 0.12 0.19 0.23 0.26 0.13 0.2 0.26 
-Energias Drone 3: 0 0.1 0.18 0.09 0.11 0.2 0.1 0.16 
-Energias Drone 4: 0 0.11 0.2 0.26 0.02 0.12 
+Energias Drone 1: 0 0.07 0.15 0.09 0.13 0.22 0.14 0.18 0.26 0.07 0.14 
+Energias Drone 2: 0 0.13 0.21 0.08 0.1 0.2 0.14 0.2 
+Energias Drone 3: 0 0.12 0.2 0.26 0.02 0.11 
+Energias Drone 4: 0 0.1 0.18 0.07 0.09 0.18 0.1 0.16 0.07 0.11 0.18 0.09 0.15 
 
-Pesos Drone 1: 1.5 0.1 1.5 0 1.5 0.2 1.5 0.6 0.4 0.1 1.5 0.1 0 
-Pesos Drone 2: 1.5 1.2 0.7 0.2 0 1.5 0.8 0.6 0 
-Pesos Drone 3: 1.5 0.1 1.5 1.2 0.3 1.5 0.1 0 
-Pesos Drone 4: 1.5 0.5 0 1.5 0.9 0 
+Pesos Drone 1: 1.5 0 1.5 0.2 0 1.5 1.2 1 1.5 0.1 0 
+Pesos Drone 2: 1.5 1 1.5 1 0.3 1.5 1.1 0 
+Pesos Drone 3: 1.5 0.6 0 1.5 0.1 0 
+Pesos Drone 4: 1.5 0.1 1.5 0.5 0.19 1.5 0.1 1.5 0.6 0.3 1.5 1.3 0 
 
 ------------------------------------------------------------------------------------------------------------
 
 Estadísticas:
 
-Iteraciones totales: 964330
+Iteraciones totales: 964891
 
-Apariciones BalanceoCargaA1: 5/4623
-Apariciones BalanceoCargaA2: 21/6183
-Apariciones BalanceoCargaB: 168/21447
-Apariciones Swap: 6737/87622
-Apariciones MoverCliente: 91336/643290
-Apariciones MoverCliente2: 45/4032
-Apariciones CrearRuta: 24773/191405
-Apariciones CrearRuta2: 80/5728
+Apariciones BalanceoCargaA1: 31/5084
+Apariciones BalanceoCargaA2: 50/5506
+Apariciones BalanceoCargaB: 269/23836
+Apariciones Swap: 4804/62670
+Apariciones MoverCliente: 59391/451186
+Apariciones MoverCliente2: 48/9642
+Apariciones CrearRuta: 62246/397121
+Apariciones CrearRuta2: 61/9846
 
-Tiempo de ejecución: 272 segundos
+Tiempo de ejecución: 246 segundos
 
 ------------------------------------------------------------------------------------------------------------

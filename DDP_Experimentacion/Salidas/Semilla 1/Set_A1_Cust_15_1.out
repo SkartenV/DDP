@@ -24,39 +24,39 @@ Pesos Drone 3: 1.5 1 0.5 0
 
 Solución Iterated Local Search:
 
-Función evaluación: 7320.86
+Función evaluación: 7564.07
 
-Rutas Drone 1: 0 8 0 5 13 1 0 7 0 11 16 
-Rutas Drone 2: 0 2 15 0 4 6 0 3 9 10 16 
-Rutas Drone 3: 0 14 12 16 
+Rutas Drone 1: 0 8 0 13 0 6 7 0 11 16 
+Rutas Drone 2: 0 2 5 0 1 15 4 0 3 9 10 16 
+Rutas Drone 3: 0 12 14 16 
 
-Tiempos Drone 1: 0 323 645.44 828.42 1119.57 1439.44 1924.85 2176.13 2427.42 2791.01 3154.6 
-Tiempos Drone 2: 0 411 607 1051 1493.11 2167 2483.39 3233 4232 4627 4906.5 
-Tiempos Drone 3: 0 1602 1795.86 2162.31 
+Tiempos Drone 1: 0 323 645.44 1116.51 1587.58 2167 2367.12 2618.41 2982 3345.59 
+Tiempos Drone 2: 0 411 638.68 821.66 1307.08 1473.37 1678.78 2120.89 3233 4232 4627 4906.5 
+Tiempos Drone 3: 0 1029 1602 2162.29 
 
-Energias Drone 1: 0 0.07 0.14 0.04 0.09 0.16 0.2 0.05 0.07 0.07 0.16 
-Energias Drone 2: 0 0.14 0.2 0.23 0.06 0.13 0.17 0.06 0.09 0.16 0.25 
+Energias Drone 1: 0 0.07 0.14 0.12 0.24 0.08 0.12 0.17 0.02 0.09 
+Energias Drone 2: 0 0.14 0.21 0.24 0.07 0.14 0.19 0.23 0.03 0.11 0.2 0.24 
 Energias Drone 3: 0 0.15 0.21 0.24 
 
-Pesos Drone 1: 1.5 0 1.5 1.3 0.19 0 1.5 0.5 1.5 0.2 0 
-Pesos Drone 2: 1.5 0.9 0.19 1.5 0.9 0.49 1.5 1.3 0.39 0 0 
+Pesos Drone 1: 1.5 0 1.5 0.39 1.5 1.1 0.1 1.5 0.2 0 
+Pesos Drone 2: 1.5 0.9 0.7 1.5 1.4 0.7 0 1.5 1.3 0.39 0 0 
 Pesos Drone 3: 1.5 1 0.5 0 
 
 ------------------------------------------------------------------------------------------------------------
 
 Estadísticas:
 
-Iteraciones totales: 1082077
+Iteraciones totales: 1080465
 
-Apariciones BalanceoCargaA1: 0/49493
-Apariciones BalanceoCargaA2: 0/49688
-Apariciones BalanceoCargaB: 0/50819
-Apariciones Swap: 34096/88285
-Apariciones MoverCliente: 467572/840813
-Apariciones MoverCliente2: 30/983
-Apariciones CrearRuta: 43/1287
-Apariciones CrearRuta2: 9/709
+Apariciones BalanceoCargaA1: 0/49490
+Apariciones BalanceoCargaA2: 0/49698
+Apariciones BalanceoCargaB: 0/50812
+Apariciones Swap: 33218/92314
+Apariciones MoverCliente: 437396/818077
+Apariciones MoverCliente2: 8/6802
+Apariciones CrearRuta: 5/6784
+Apariciones CrearRuta2: 2/6488
 
-Tiempo de ejecución: 309 segundos
+Tiempo de ejecución: 299 segundos
 
 ------------------------------------------------------------------------------------------------------------

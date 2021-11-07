@@ -4129,7 +4129,7 @@ vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesT
 vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones, vector<int> *FlagPerturbacion,
 int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimientos_Perturbacion, float Temperatura_Inicial, float Factor_Enfiramiento){
 
-    int Contador = 0, Iteraciones_Totales = *IteracionesTotales, NumRutasRespaldo;
+    int Contador = 0, Iteraciones_Totales = *IteracionesTotales;
     float FuncionEvaluacion_act = *FuncionEvaluacion, MejorFuncionEvaluacion;
     vector<int> Estadisticas_SA = *EstadisticasSA, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_SA = *Evaluaciones, Flag_Perturbacion = *FlagPerturbacion;
     vector<float> Temperaturas_SA = *Temperaturas, Calidades_SA = *Calidades;
@@ -4149,7 +4149,7 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
         TiemposRepaldo = MejorTiempos;
         EnergiasRespaldo = MejorEnergias;
         PesosRespaldo = MejorPesos;
-        NumRutasRespaldo = NumRutas;
+        NumRutas = Mejor_Solucion.size();
         Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, &Flag_Perturbacion);
         Tiempos_act = MejorTiempos;
         Energias_act = MejorEnergias;
@@ -4167,7 +4167,6 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
             MejorTiempos = TiemposRepaldo;
             MejorEnergias = EnergiasRespaldo;
             MejorPesos = PesosRespaldo;
-            NumRutas = NumRutasRespaldo;
         }
 
         Contador++;
