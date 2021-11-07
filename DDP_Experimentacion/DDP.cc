@@ -4228,6 +4228,7 @@ int main(int argc, char **argv){
 
     // Archivos de salida
     ofstream Salida("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + ".out");
+    ofstream CompilacionCalidades("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Calidades.csv");
     ofstream CompilacionTemperaturas("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Temperaturas.csv");
     ofstream CompilacionMovimientos("./Salidas/Semilla " + to_string(Seed) + "/" + NombreInstancia + "_Movimientos.csv");
 
@@ -4352,13 +4353,33 @@ int main(int argc, char **argv){
     CompilacionMovimientos << "CrearRuta2," + to_string(EstadisticasSA[8]) + "," + to_string(EstadisticasSA[9]) + "\n";
     CompilacionMovimientos.close();
 
-    CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
-    int iter=1;
-    for(i=0;i<(int)Temperaturas.size();i++){
+    CompilacionCalidades << "Iteracion" << ",Temperatura" << ",Calidad" << ",Fase" << "\n";
+    int iter=1, FlagFase = 0, ContIter = 0;
+    for(i=0;i<(int)Calidades.size();i++){
+
+        if(FlagPerturbacion[i] == 1 && ContIter > 29000){
+            FlagFase = 1;
+            ContIter = 0;
+        }
+
+        if(FlagFase == 1){
+            CompilacionCalidades << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
+            FlagFase = 0;
+        }
+
         if(iter % 1000 == 0)//|| FlagPerturbacion[i] == 1)
-            CompilacionTemperaturas << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
+            CompilacionCalidades << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(Calidades[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
+        iter++;
+        ContIter++;
+    }
+
+    CompilacionTemperaturas << "Iteracion" << ",Temperatura" << ",Fase" << "\n";
+    iter = 1;
+    for(i=0;i<(int)Temperaturas.size();i++){
+        CompilacionTemperaturas << to_string(iter) + "," + to_string(Temperaturas[i]) + "," + to_string(FlagPerturbacion[i]) + "\n";
         iter++;
     }
+    CompilacionCalidades.close();
     CompilacionTemperaturas.close();
 
     end = time(0);
