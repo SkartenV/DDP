@@ -1,0 +1,54 @@
+------------------------------------------------------------------------------------------------------------
+
+Solución Greedy:
+
+Función evaluación: 3661.07
+
+Rutas Drone 1: 0 9 0 7 0 8 0 10 11 
+Rutas Drone 2: 0 3 6 1 0 4 2 5 11 
+
+Tiempos Drone 1: 0 776 1114.99 1362.54 1610.08 1823 1975.2 2230.42 2485.64 
+Tiempos Drone 2: 0 750 1000 1186.49 1469.33 1560.59 1979 2421 2718.28 
+
+Energias Drone 1: 0 0.09 0.19 0.06 0.13 0.04 0.08 0.06 0.13 
+Energias Drone 2: 0 0.05 0.08 0.12 0.19 0.02 0.13 0.16 0.24 
+
+Pesos Drone 1: 1.5 0.7 1.5 0.6 1.5 0.7 1.5 0.39 0 
+Pesos Drone 2: 1.5 1.3 0.69 0 1.5 0.9 0.49 0.19 0 
+
+------------------------------------------------------------------------------------------------------------
+
+Solución Iterated Local Search:
+
+Función evaluación: 3093.18
+
+Rutas Drone 1: 0 7 4 0 8 6 0 10 11 
+Rutas Drone 2: 0 9 3 0 1 2 5 11 
+
+Tiempos Drone 1: 0 1205 1451 1542.26 1823 1881 1983.62 2238.84 2494.06 
+Tiempos Drone 2: 0 776 958.52 1126.81 1409.65 1979 2421 2718.28 
+
+Energias Drone 1: 0 0.07 0.15 0.24 0.02 0.08 0.13 0.03 0.06 
+Energias Drone 2: 0 0.08 0.16 0.26 0.02 0.09 0.14 0.17 
+
+Pesos Drone 1: 1.5 0.6 0 1.5 0.7 0 1.5 0.39 0 
+Pesos Drone 2: 1.5 0.7 0.5 1.5 0.8 0.4 0 0 
+
+------------------------------------------------------------------------------------------------------------
+
+Estadísticas:
+
+Iteraciones totales: 933896
+
+Apariciones BalanceoCargaA1: 6/401
+Apariciones BalanceoCargaA2: 14/420
+Apariciones BalanceoCargaB: 40/471
+Apariciones Swap: 13886/96747
+Apariciones MoverCliente: 196286/818530
+Apariciones MoverCliente2: 21/2090
+Apariciones CrearRuta: 1018/13530
+Apariciones CrearRuta2: 12/1707
+
+Tiempo de ejecución: 237 segundos
+
+------------------------------------------------------------------------------------------------------------

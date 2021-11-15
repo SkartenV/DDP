@@ -3933,6 +3933,8 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 }
             }
 
+            *FuncionEvaluacion = FuncionEvaluacionTotal(Rutas, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+
             // Si la solución actual mejora con respecto a la mejor hasta el momento
             if(*FuncionEvaluacion < MejorFuncionEvaluacion){
                 MejorRutas = Rutas;
@@ -3974,17 +3976,17 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
 
 vector<vector<int>> IteratedLocalSearch(vector<vector<int>> Rutas, vector<vector<float>> *Tiempos,
 vector<vector<float>> *Energias, vector<vector<float>> *Pesos, int *IteracionesTotales, vector<int> *EstadisticasPerturbacion, vector<int> *EstadisticasSA, vector<int> X_coor, vector<int> Y_coor, vector<int> ReadyTime, vector<int> DueTime,
-vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones,
+vector<float> Demand, float Capacidad, float CapacidadEnergetica, float *FuncionEvaluacion, int *NumRutas, int NumDrones, int delta, int tipo, float q, vector<float> *Temperaturas, vector<float> *Calidades, vector<int> *Evaluaciones,
 int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimientos_Perturbacion, float Temperatura_Inicial, float Factor_Enfiramiento){
 
-    int Contador = 0, Iteraciones_Totales = *IteracionesTotales;
+    int Contador = 0, Iteraciones_Totales = *IteracionesTotales, NumRutas_SA = *NumRutas;
     float FuncionEvaluacion_act = *FuncionEvaluacion, MejorFuncionEvaluacion;
     vector<int> Estadisticas_SA = *EstadisticasSA, Estadisticas_Perturbacion = *EstadisticasPerturbacion, Evaluaciones_SA = *Evaluaciones;
     vector<float> Temperaturas_SA = *Temperaturas, Calidades_SA = *Calidades;
     vector<vector<int>> Solucion_Actual, Mejor_Solucion, Solucion_Perturbada, Solucion_SA;
     vector<vector<float>> Tiempos_act = *Tiempos, Energias_act = *Energias, Pesos_act = *Pesos, MejorTiempos, MejorEnergias, MejorPesos, TiemposRepaldo, EnergiasRespaldo, PesosRespaldo;
 
-    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+    Solucion_Actual = SimulatedAnnealing(Rutas, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas_SA, NumDrones, delta, tipo, 0, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
     Mejor_Solucion = Solucion_Actual;
     MejorFuncionEvaluacion = FuncionEvaluacion_act;
 
@@ -3997,12 +3999,14 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
         TiemposRepaldo = MejorTiempos;
         EnergiasRespaldo = MejorEnergias;
         PesosRespaldo = MejorPesos;
-        NumRutas = Mejor_Solucion.size();
-        Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA);
+        NumRutas_SA = Mejor_Solucion.size();
+        Solucion_Perturbada = Perturbacion(Mejor_Solucion, &MejorTiempos, &MejorEnergias, &MejorPesos, &Iteraciones_Totales, &Estadisticas_Perturbacion, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, NumRutas_SA, NumDrones, delta, tipo, 0, Movimientos_Perturbacion, &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA);
         Tiempos_act = MejorTiempos;
         Energias_act = MejorEnergias;
         Pesos_act = MejorPesos;
-        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+        Solucion_SA = SimulatedAnnealing(Solucion_Perturbada, &Tiempos_act, &Energias_act, &Pesos_act, &Iteraciones_Totales, &Estadisticas_SA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion_act, &NumRutas_SA, NumDrones, delta, tipo, 0,  &Temperaturas_SA, &Calidades_SA, &Evaluaciones_SA, Iteraciones_SA, Iteraciones_CambioT, Temperatura_Inicial, Factor_Enfriamiento);
+        NumRutas_SA = Solucion_SA.size();
+        FuncionEvaluacion_act = FuncionEvaluacionTotal(Solucion_SA, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
 
         if(FuncionEvaluacion_act < MejorFuncionEvaluacion){
             Mejor_Solucion = Solucion_SA;
@@ -4030,6 +4034,7 @@ int Iteraciones_ILS, int Iteraciones_SA, int Iteraciones_CambioT, int Movimiento
     *Temperaturas = Temperaturas_SA;
     *Calidades = Calidades_SA;
     *Evaluaciones = Evaluaciones_SA;
+    *NumRutas = NumRutas_SA;
 
     return Mejor_Solucion;
 
@@ -4099,7 +4104,7 @@ int main(int argc, char **argv){
     FuncionEvaluacion = DistanciaTotal(Rutas, X_coor, Y_coor);
     VisitadosDrones = ClientesDrones(Rutas);
 
-    Rutas_ILS = IteratedLocalSearch(Rutas, &Tiempos, &Energias, &Pesos, &IteracionesTotales, &EstadisticasPerturbacion, &EstadisticasSA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion, NumRutas, DroneNum, Delta, Tipo, 0, &Temperaturas, &Calidades, &Evaluaciones, Iteraciones_ILS, Iteraciones_SA, Iteraciones_CambioT, Movimientos_Perturbacion, Temperatura_Inicial, Factor_Enfriamiento);
+    Rutas_ILS = IteratedLocalSearch(Rutas, &Tiempos, &Energias, &Pesos, &IteracionesTotales, &EstadisticasPerturbacion, &EstadisticasSA, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, &FuncionEvaluacion, &NumRutas, DroneNum, Delta, Tipo, 0, &Temperaturas, &Calidades, &Evaluaciones, Iteraciones_ILS, Iteraciones_SA, Iteraciones_CambioT, Movimientos_Perturbacion, Temperatura_Inicial, Factor_Enfriamiento);
 
     GapPorcentual = 100*((abs(SolucionAutores - FuncionEvaluacion))/SolucionAutores);
     cout << fixed << setprecision(2) << GapPorcentual << endl;

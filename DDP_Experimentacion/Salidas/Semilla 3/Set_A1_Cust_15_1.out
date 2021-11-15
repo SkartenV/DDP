@@ -24,39 +24,39 @@ Pesos Drone 3: 1.5 1 0.5 0
 
 Solución Iterated Local Search:
 
-Función evaluación: 7564.07
+Función evaluación: 7305.65
 
-Rutas Drone 1: 0 8 0 13 0 7 6 0 11 16 
-Rutas Drone 2: 0 2 5 0 4 15 1 0 3 9 10 16 
-Rutas Drone 3: 0 12 14 16 
+Rutas Drone 1: 0 8 0 5 13 0 12 7 0 11 16 
+Rutas Drone 2: 0 4 6 0 3 9 10 16 
+Rutas Drone 3: 0 2 0 1 14 15 16 
 
-Tiempos Drone 1: 0 323 645.44 1116.51 1587.58 1838.87 2167 2483.39 2846.98 3210.57 
-Tiempos Drone 2: 0 411 638.68 821.66 1263.77 1469.18 1635.48 2120.89 3233 4232 4627 4906.5 
-Tiempos Drone 3: 0 1029 1602 2162.29 
+Tiempos Drone 1: 0 323 645.44 828.42 1119.57 1590.64 1957.09 2073.81 2325.1 2688.69 3052.28 
+Tiempos Drone 2: 0 1025 2167 2483.39 3233 4232 4627 4906.5 
+Tiempos Drone 3: 0 411 821.36 1306.77 1602 1723.75 2167.76 
 
-Energias Drone 1: 0 0.07 0.14 0.12 0.24 0.07 0.11 0.15 0.02 0.09 
-Energias Drone 2: 0 0.14 0.21 0.24 0.06 0.12 0.16 0.21 0.03 0.11 0.2 0.24 
-Energias Drone 3: 0 0.15 0.21 0.24 
+Energias Drone 1: 0 0.07 0.14 0.04 0.09 0.15 0.05 0.1 0.12 0.07 0.16 
+Energias Drone 2: 0 0.14 0.2 0.24 0.06 0.13 0.18 0.22 
+Energias Drone 3: 0 0.14 0.19 0.05 0.11 0.17 0.21 
 
-Pesos Drone 1: 1.5 0 1.5 0.39 1.5 0.5 0 1.5 0.2 0 
-Pesos Drone 2: 1.5 0.9 0.7 1.5 0.9 0.19 0 1.5 1.3 0.39 0 0 
-Pesos Drone 3: 1.5 1 0.5 0 
+Pesos Drone 1: 1.5 0 1.5 1.3 0.19 1.5 1 0 1.5 0.2 0 
+Pesos Drone 2: 1.5 0.9 0.49 1.5 1.3 0.39 0 0 
+Pesos Drone 3: 1.5 0.9 1.5 1.4 0.9 0.19 0 
 
 ------------------------------------------------------------------------------------------------------------
 
 Estadísticas:
 
-Iteraciones totales: 1082077
+Iteraciones totales: 1082604
 
-Apariciones BalanceoCargaA1: 0/49582
-Apariciones BalanceoCargaA2: 0/49308
-Apariciones BalanceoCargaB: 0/51110
-Apariciones Swap: 34654/89002
-Apariciones MoverCliente: 471961/841161
-Apariciones MoverCliente2: 6/681
-Apariciones CrearRuta: 5/681
-Apariciones CrearRuta2: 0/552
+Apariciones BalanceoCargaA1: 0/49584
+Apariciones BalanceoCargaA2: 0/49256
+Apariciones BalanceoCargaB: 0/51160
+Apariciones Swap: 1848/20190
+Apariciones MoverCliente: 184625/907999
+Apariciones MoverCliente2: 12/1283
+Apariciones CrearRuta: 38/1903
+Apariciones CrearRuta2: 1/1229
 
-Tiempo de ejecución: 304 segundos
+Tiempo de ejecución: 306 segundos
 
 ------------------------------------------------------------------------------------------------------------
