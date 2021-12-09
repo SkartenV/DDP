@@ -386,7 +386,8 @@ vector<float> ActualizarProbabilidades(vector<int> *Numeradores, int *Denominado
 // Movimiento que hace swap entre 2 nodos de rutas distintas de un mismo drone
 vector<vector<int>> Swap(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosSwap){
 
-    int NodoOrigen, PrimerNodo, SegundoNodo, DroneElegido, aux;
+    int ContadorLoop = 0, NodoOrigen, PrimerNodo, SegundoNodo, DroneElegido, aux;
+    bool FlagContinuar = false;
     NodosSwap->clear();
    
     DroneElegido = int_rand(0, DroneNum);
@@ -394,53 +395,62 @@ vector<vector<int>> Swap(vector<vector<int>> Rutas, int DroneNum, vector<int> *N
 
     // Verificar que la ruta del drone seleccionado tenga más de 1 cliente
     while(true){
+        if(ContadorLoop == 1000){
+            NodosSwap->push_back(-1);
+            FlagContinuar = true;
+            break;
+        }
         if(NuevaRuta.size()>3)
             break;
         else{
             DroneElegido = int_rand(0, DroneNum);
             NuevaRuta = Rutas[DroneElegido];
         }
+        ContadorLoop++;
     }
 
-    NodosSwap->push_back(DroneElegido);
+    if(FlagContinuar != true){
+        NodosSwap->push_back(DroneElegido);
 
-    // Se selecciona el primer nodo aleatoriamente
-    PrimerNodo = int_rand(1, NuevaRuta.size()-1);
-    NodoOrigen = NuevaRuta[0];
+        // Se selecciona el primer nodo aleatoriamente
+        PrimerNodo = int_rand(1, NuevaRuta.size()-1);
+        NodoOrigen = NuevaRuta[0];
 
-    // Verificar que el nodo seleccionado no sea el mismo al nodo origen
-    while(true){
-        if(NuevaRuta[PrimerNodo] != NodoOrigen)
-            break;
-        else
-            PrimerNodo = int_rand(1, NuevaRuta.size()-1);
-    }
+        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+        while(true){
+            if(NuevaRuta[PrimerNodo] != NodoOrigen)
+                break;
+            else
+                PrimerNodo = int_rand(1, NuevaRuta.size()-1);
+        }
 
-    SegundoNodo = int_rand(1, NuevaRuta.size()-1);
-   
-    // Verificar que el nodo seleccionado no sea el mismo al nodo origen ni al nodo seleccionado anteriormente
-    while(true){
-        if(NuevaRuta[SegundoNodo] != NodoOrigen && SegundoNodo != PrimerNodo)
-            break;
-        else
-            SegundoNodo = int_rand(1, NuevaRuta.size()-1);
-    }
+        SegundoNodo = int_rand(1, NuevaRuta.size()-1);
+    
+        // Verificar que el nodo seleccionado no sea el mismo al nodo origen ni al nodo seleccionado anteriormente
+        while(true){
+            if(NuevaRuta[SegundoNodo] != NodoOrigen && SegundoNodo != PrimerNodo)
+                break;
+            else
+                SegundoNodo = int_rand(1, NuevaRuta.size()-1);
+        }
 
-    NodosSwap->push_back(PrimerNodo);
-    NodosSwap->push_back(SegundoNodo);
+        NodosSwap->push_back(PrimerNodo);
+        NodosSwap->push_back(SegundoNodo);
 
-    aux = NuevaRuta[PrimerNodo];
-    NuevaRuta[PrimerNodo] = NuevaRuta[SegundoNodo];
-    NuevaRuta[SegundoNodo] = aux;
+        aux = NuevaRuta[PrimerNodo];
+        NuevaRuta[PrimerNodo] = NuevaRuta[SegundoNodo];
+        NuevaRuta[SegundoNodo] = aux;
 
-    Rutas[DroneElegido] = NuevaRuta;
+        Rutas[DroneElegido] = NuevaRuta;
+    } 
     return Rutas;
 }
 
 // Movimiento que mueve un cliente al azar a una posición al azar dentro del mismo drone
 vector<vector<int>> MoverCliente(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosMover){
 
-    int NodoOrigen, NodoFinal, ClienteMovido, PrimerNodo, SegundoNodo, DroneElegido, UnicoCliente = 0;
+    int ContadorLoop = 0, NodoOrigen, NodoFinal, ClienteMovido, PrimerNodo, SegundoNodo, DroneElegido, UnicoCliente = 0;
+    bool FlagContinuar = false;
     NodosMover->clear();
    
     DroneElegido = int_rand(0, DroneNum);
@@ -456,6 +466,11 @@ vector<vector<int>> MoverCliente(vector<vector<int>> Rutas, int DroneNum, vector
 
     // Verificar que la ruta del drone seleccionado tenga más de 1 cliente
     while(true){
+        if(ContadorLoop == 1000){
+            NodosMover->push_back(-1);
+            FlagContinuar = true;
+            break;
+        }
         if(NuevaRuta.size()>3)
             break;
         else{
@@ -468,51 +483,55 @@ vector<vector<int>> MoverCliente(vector<vector<int>> Rutas, int DroneNum, vector
             }
             NuevaRuta = Rutas[DroneElegido];
         }
+        ContadorLoop++;
     }
 
-    NodosMover->push_back(DroneElegido);
+    if(FlagContinuar != true){
+        NodosMover->push_back(DroneElegido);
 
-    // Se selecciona el primer nodo aleatoriamente
-    PrimerNodo = int_rand(1, NuevaRuta.size()-1);
-    NodoOrigen = NuevaRuta[0];
-    NodoFinal = Rutas[DroneElegido][NuevaRuta.size()-1];
+        // Se selecciona el primer nodo aleatoriamente
+        PrimerNodo = int_rand(1, NuevaRuta.size()-1);
+        NodoOrigen = NuevaRuta[0];
+        NodoFinal = Rutas[DroneElegido][NuevaRuta.size()-1];
 
-    // Verificar que el nodo seleccionado no sea el mismo al nodo origen
-    while(true){
-        if(NuevaRuta[PrimerNodo] != NodoOrigen){
-            if(NuevaRuta[PrimerNodo-1] == NodoOrigen && NuevaRuta[PrimerNodo+1] == NodoFinal)
-                PrimerNodo = int_rand(1, NuevaRuta.size()-1);
+        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+        while(true){
+            if(NuevaRuta[PrimerNodo] != NodoOrigen){
+                if(NuevaRuta[PrimerNodo-1] == NodoOrigen && NuevaRuta[PrimerNodo+1] == NodoFinal)
+                    PrimerNodo = int_rand(1, NuevaRuta.size()-1);
+                else
+                    break;
+            }
             else
-                break;
+                PrimerNodo = int_rand(1, NuevaRuta.size()-1);
         }
-        else
-            PrimerNodo = int_rand(1, NuevaRuta.size()-1);
-    }
 
-    ClienteMovido = NuevaRuta[PrimerNodo];
+        ClienteMovido = NuevaRuta[PrimerNodo];
 
-    if(NuevaRuta[PrimerNodo-1] == NodoOrigen && NuevaRuta[PrimerNodo+1] == NodoOrigen){
+        if(NuevaRuta[PrimerNodo-1] == NodoOrigen && NuevaRuta[PrimerNodo+1] == NodoOrigen){
+            NuevaRuta.erase(NuevaRuta.begin()+PrimerNodo);
+            UnicoCliente = 1;
+        }
         NuevaRuta.erase(NuevaRuta.begin()+PrimerNodo);
-        UnicoCliente = 1;
+
+        SegundoNodo = int_rand(1, NuevaRuta.size()-1);
+
+        NodosMover->push_back(PrimerNodo);
+        NodosMover->push_back(SegundoNodo);
+        NodosMover->push_back(UnicoCliente);
+
+        NuevaRuta.insert(NuevaRuta.begin()+SegundoNodo, ClienteMovido);
+
+        Rutas[DroneElegido] = NuevaRuta;
     }
-    NuevaRuta.erase(NuevaRuta.begin()+PrimerNodo);
-
-    SegundoNodo = int_rand(1, NuevaRuta.size()-1);
-
-    NodosMover->push_back(PrimerNodo);
-    NodosMover->push_back(SegundoNodo);
-    NodosMover->push_back(UnicoCliente);
-
-    NuevaRuta.insert(NuevaRuta.begin()+SegundoNodo, ClienteMovido);
-
-    Rutas[DroneElegido] = NuevaRuta;
     return Rutas;
 }
 
 // Movimiento que mueve un cliente al azar a una posición al azar dentro de un drone distinto
 vector<vector<int>> MoverCliente2(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosMover){
 
-    int NodoOrigen, NodoFinal, ClienteMovido, PrimerNodo, SegundoNodo, Drone1, Drone2, UnicoCliente = 0;
+    int ContadorLoop = 0, NodoOrigen, NodoFinal, ClienteMovido, PrimerNodo, SegundoNodo, Drone1, Drone2, UnicoCliente = 0;
+    bool FlagContinuar = false;
     vector<int> Ruta1, Ruta2;
     NodosMover->clear();
    
@@ -529,6 +548,11 @@ vector<vector<int>> MoverCliente2(vector<vector<int>> Rutas, int DroneNum, vecto
 
     // Verificar que la ruta del drone seleccionado tenga más de 1 cliente
     while(true){
+        if(ContadorLoop == 1000){
+            NodosMover->push_back(-1);
+            FlagContinuar = true;
+            break;
+        }
         if(Ruta1.size()>3)
             break;
         else{
@@ -541,58 +565,62 @@ vector<vector<int>> MoverCliente2(vector<vector<int>> Rutas, int DroneNum, vecto
             }
             Ruta1 = Rutas[Drone1];
         }
+        ContadorLoop++;
     }
 
-    NodosMover->push_back(Drone1);
+    if(FlagContinuar != true){
 
-    // Se selecciona el primer nodo aleatoriamente
-    PrimerNodo = int_rand(1, Ruta1.size()-1);
-    NodoOrigen = Ruta1[0];
-    NodoFinal = Rutas[Drone1][Ruta1.size()-1];
+        NodosMover->push_back(Drone1);
 
-    // Verificar que el nodo seleccionado no sea el mismo al nodo origen
-    while(true){
-        if(Ruta1[PrimerNodo] != NodoOrigen){
-            if(Ruta1[PrimerNodo-1] == NodoOrigen && Ruta1[PrimerNodo+1] == NodoFinal)
-                PrimerNodo = int_rand(1, Ruta1.size()-1);
+        // Se selecciona el primer nodo aleatoriamente
+        PrimerNodo = int_rand(1, Ruta1.size()-1);
+        NodoOrigen = Ruta1[0];
+        NodoFinal = Rutas[Drone1][Ruta1.size()-1];
+
+        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+        while(true){
+            if(Ruta1[PrimerNodo] != NodoOrigen){
+                if(Ruta1[PrimerNodo-1] == NodoOrigen && Ruta1[PrimerNodo+1] == NodoFinal)
+                    PrimerNodo = int_rand(1, Ruta1.size()-1);
+                else
+                    break;
+            }
             else
-                break;
+                PrimerNodo = int_rand(1, Ruta1.size()-1);
         }
-        else
-            PrimerNodo = int_rand(1, Ruta1.size()-1);
-    }
 
-    ClienteMovido = Ruta1[PrimerNodo];
+        ClienteMovido = Ruta1[PrimerNodo];
 
-    // Se borra el cliente de la Ruta1
-    if(Ruta1[PrimerNodo-1] == NodoOrigen && Ruta1[PrimerNodo+1] == NodoOrigen){
+        // Se borra el cliente de la Ruta1
+        if(Ruta1[PrimerNodo-1] == NodoOrigen && Ruta1[PrimerNodo+1] == NodoOrigen){
+            Ruta1.erase(Ruta1.begin()+PrimerNodo);
+            UnicoCliente = 1;
+        }
         Ruta1.erase(Ruta1.begin()+PrimerNodo);
-        UnicoCliente = 1;
+
+        // Se selecciona el segundo drone
+        Drone2 = int_rand(0, DroneNum);
+
+        while(true){
+            if(Drone2 != Drone1)
+                break;
+            else
+                Drone2 = int_rand(0, DroneNum);
+        }
+
+        Ruta2 = Rutas[Drone2];
+        SegundoNodo = int_rand(1, Ruta2.size()-1);
+
+        Ruta2.insert(Ruta2.begin()+SegundoNodo, ClienteMovido);
+
+        NodosMover->push_back(Drone2);
+        NodosMover->push_back(PrimerNodo);
+        NodosMover->push_back(SegundoNodo);
+        NodosMover->push_back(UnicoCliente);
+
+        Rutas[Drone1] = Ruta1;
+        Rutas[Drone2] = Ruta2;
     }
-    Ruta1.erase(Ruta1.begin()+PrimerNodo);
-
-    // Se selecciona el segundo drone
-    Drone2 = int_rand(0, DroneNum);
-
-    while(true){
-        if(Drone2 != Drone1)
-            break;
-        else
-            Drone2 = int_rand(0, DroneNum);
-    }
-
-    Ruta2 = Rutas[Drone2];
-    SegundoNodo = int_rand(1, Ruta2.size()-1);
-
-    Ruta2.insert(Ruta2.begin()+SegundoNodo, ClienteMovido);
-
-    NodosMover->push_back(Drone2);
-    NodosMover->push_back(PrimerNodo);
-    NodosMover->push_back(SegundoNodo);
-    NodosMover->push_back(UnicoCliente);
-
-    Rutas[Drone1] = Ruta1;
-    Rutas[Drone2] = Ruta2;
 
     return Rutas;
 }
@@ -600,7 +628,8 @@ vector<vector<int>> MoverCliente2(vector<vector<int>> Rutas, int DroneNum, vecto
 // Movimiento que selecciona un cliente al azar y crea una ruta con ese cliente en una posición al azar dentro del mismo drone
 vector<vector<int>> CrearRuta(vector<vector<int>> Rutas, int DroneNum, vector<int> *NodosCortar){
 
-    int NodoOrigen, NodoFinal, NodoSeleccionado, Posicion, DroneElegido, FlagCortar, UnicoCliente = 0;
+    int ContadorLoop = 0, NodoOrigen, NodoFinal, NodoSeleccionado, Posicion, DroneElegido, FlagCortar, UnicoCliente = 0;
+    bool FlagContinuar = false;
     NodosCortar->clear();
    
     DroneElegido = int_rand(0, DroneNum);
@@ -618,6 +647,11 @@ vector<vector<int>> CrearRuta(vector<vector<int>> Rutas, int DroneNum, vector<in
 
     // Verificar que la ruta del drone seleccionado tenga más de 1 cliente
     while(true){
+        if(ContadorLoop == 1000){
+            NodosCortar->push_back(-1);
+            FlagContinuar = true;
+            break;
+        }
         if(NuevaRuta.size()>3)
             break;
         else{
@@ -631,73 +665,78 @@ vector<vector<int>> CrearRuta(vector<vector<int>> Rutas, int DroneNum, vector<in
             NuevaRuta = Rutas[DroneElegido];
             RutaAux = NuevaRuta;
         }
+        ContadorLoop++;
     }
 
-    NodosCortar->push_back(DroneElegido);
+    if(FlagContinuar != true){
 
-    // Se selecciona el primer nodo aleatoriamente
-    NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
-    NodoOrigen = NuevaRuta[0];
-    NodoFinal = Rutas[DroneElegido][NuevaRuta.size()-1];
+        NodosCortar->push_back(DroneElegido);
 
-    // Verificar que el nodo seleccionado no sea el mismo al nodo origen
-    while(true){
-        if(NuevaRuta[NodoSeleccionado] != NodoOrigen){
-            if(NuevaRuta[NodoSeleccionado-1] == NodoOrigen && NuevaRuta[NodoSeleccionado+1] == NodoFinal)
-                NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
+        // Se selecciona el primer nodo aleatoriamente
+        NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
+        NodoOrigen = NuevaRuta[0];
+        NodoFinal = Rutas[DroneElegido][NuevaRuta.size()-1];
+
+        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+        while(true){
+            if(NuevaRuta[NodoSeleccionado] != NodoOrigen){
+                if(NuevaRuta[NodoSeleccionado-1] == NodoOrigen && NuevaRuta[NodoSeleccionado+1] == NodoFinal)
+                    NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
+                else
+                    break;
+            }
             else
-                break;
+                NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
         }
-        else
-            NodoSeleccionado = int_rand(1, NuevaRuta.size()-1);
-    }
 
-    NodosCortar->push_back(NodoSeleccionado);
+        NodosCortar->push_back(NodoSeleccionado);
 
-    if(NuevaRuta[NodoSeleccionado-1] == NodoOrigen && NuevaRuta[NodoSeleccionado+1] == NodoOrigen){
+        if(NuevaRuta[NodoSeleccionado-1] == NodoOrigen && NuevaRuta[NodoSeleccionado+1] == NodoOrigen){
+            RutaAux.erase(RutaAux.begin()+NodoSeleccionado);
+            UnicoCliente = 1;
+        }
         RutaAux.erase(RutaAux.begin()+NodoSeleccionado);
-        UnicoCliente = 1;
-    }
-    RutaAux.erase(RutaAux.begin()+NodoSeleccionado);
 
-    Posicion = int_rand(1, RutaAux.size());
+        Posicion = int_rand(1, RutaAux.size());
 
-    if(RutaAux[Posicion] != NodoOrigen && RutaAux[Posicion] != NodoFinal){
-        if(RutaAux[Posicion-1] != NodoOrigen){
+        if(RutaAux[Posicion] != NodoOrigen && RutaAux[Posicion] != NodoFinal){
+            if(RutaAux[Posicion-1] != NodoOrigen){
+                RutaAux.insert(RutaAux.begin()+Posicion, 0);
+                RutaAux.insert(RutaAux.begin()+Posicion+1, NuevaRuta[NodoSeleccionado]);
+                RutaAux.insert(RutaAux.begin()+Posicion+2, 0);
+                // Se inserta un cero a la izquierda y uno a la derecha
+                FlagCortar = 1;
+            }
+            else{
+                RutaAux.insert(RutaAux.begin()+Posicion, NuevaRuta[NodoSeleccionado]);
+                RutaAux.insert(RutaAux.begin()+Posicion+1, 0);
+                // Se inserta un cero a la derecha
+                FlagCortar = 2;
+            }
+        }
+        
+        else{
             RutaAux.insert(RutaAux.begin()+Posicion, 0);
             RutaAux.insert(RutaAux.begin()+Posicion+1, NuevaRuta[NodoSeleccionado]);
-            RutaAux.insert(RutaAux.begin()+Posicion+2, 0);
-            // Se inserta un cero a la izquierda y uno a la derecha
-            FlagCortar = 1;
+            // Se inserta un cero a la izquierda
+            FlagCortar = 3;
         }
-        else{
-            RutaAux.insert(RutaAux.begin()+Posicion, NuevaRuta[NodoSeleccionado]);
-            RutaAux.insert(RutaAux.begin()+Posicion+1, 0);
-            // Se inserta un cero a la derecha
-            FlagCortar = 2;
-        }
-    }
-       
-    else{
-        RutaAux.insert(RutaAux.begin()+Posicion, 0);
-        RutaAux.insert(RutaAux.begin()+Posicion+1, NuevaRuta[NodoSeleccionado]);
-        // Se inserta un cero a la izquierda
-        FlagCortar = 3;
-    }
 
-    NodosCortar->push_back(Posicion);
-    NodosCortar->push_back(FlagCortar);
-    NodosCortar->push_back(UnicoCliente);
+        NodosCortar->push_back(Posicion);
+        NodosCortar->push_back(FlagCortar);
+        NodosCortar->push_back(UnicoCliente);
 
-    NuevaRuta = RutaAux;
-    Rutas[DroneElegido] = NuevaRuta;
+        NuevaRuta = RutaAux;
+        Rutas[DroneElegido] = NuevaRuta;
+    }
     return Rutas;
 }
 
 // Movimiento que selecciona un cliente al azar y crea una ruta con ese cliente en una posición al azar dentro de un drone distinto
 vector<vector<int>> CrearRuta2(vector<vector<int>> Rutas, int *NumRutas, int NumDrones, vector<int> *NodosCortar){
 
-    int NodoOrigen, NodoFinal, NodoSeleccionado, NumRutasAux = *NumRutas, Posicion, Drone1, Drone2, FlagCortar, UnicoCliente = 0;
+    int ContadorLoop = 0, NodoOrigen, NodoFinal, NodoSeleccionado, NumRutasAux = *NumRutas, Posicion, Drone1, Drone2, FlagCortar, UnicoCliente = 0;
+    bool FlagContinuar = false;
     NodosCortar->clear();
     vector<int> Ruta1, Ruta2, RutaAux1, RutaAux2, RutaExtra;
    
@@ -715,6 +754,11 @@ vector<vector<int>> CrearRuta2(vector<vector<int>> Rutas, int *NumRutas, int Num
 
     // Verificar que la ruta del drone seleccionado tenga más de 1 cliente
     while(true){
+        if(ContadorLoop == 1000){
+            NodosCortar->push_back(-1);
+            FlagContinuar = true;
+            break;
+        }
         if(Ruta1.size()>3)
             break;
         else{
@@ -728,125 +772,129 @@ vector<vector<int>> CrearRuta2(vector<vector<int>> Rutas, int *NumRutas, int Num
             Ruta1 = Rutas[Drone1];
             RutaAux1 = Ruta1;
         }
+        ContadorLoop++;
     }
 
-    NodosCortar->push_back(Drone1);
-    Drone2 = int_rand(0, NumDrones);
+    if(FlagContinuar != true){
 
-    // Verificar que el drone seleccionado no sea el mismo al anterior
-    while(true){
-        if(Drone2 != Drone1)
-            break;
-        else
-            Drone2 = int_rand(0, NumDrones);
-    }
+        NodosCortar->push_back(Drone1);
+        Drone2 = int_rand(0, NumDrones);
 
-    if(Drone2 >= NumRutasAux){
-        Drone2 = NumRutasAux;
-        // Se selecciona el primer nodo aleatoriamente
-        NodoSeleccionado = int_rand(1, Ruta1.size()-1);
-        NodoOrigen = Ruta1[0];
-        NodoFinal = Rutas[Drone1][Ruta1.size()-1];
-
-        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+        // Verificar que el drone seleccionado no sea el mismo al anterior
         while(true){
-            if(Ruta1[NodoSeleccionado] != NodoOrigen){
-                if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoFinal)
-                    NodoSeleccionado = int_rand(1, Ruta1.size()-1);
-                else
-                    break;
-            }
+            if(Drone2 != Drone1)
+                break;
             else
-                NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+                Drone2 = int_rand(0, NumDrones);
         }
 
-        NodosCortar->push_back(Drone2);
-        NodosCortar->push_back(NodoSeleccionado);
+        if(Drone2 >= NumRutasAux){
+            Drone2 = NumRutasAux;
+            // Se selecciona el primer nodo aleatoriamente
+            NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+            NodoOrigen = Ruta1[0];
+            NodoFinal = Rutas[Drone1][Ruta1.size()-1];
 
-        if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoOrigen){
-            RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
-            UnicoCliente = 1;
-        }
-        RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
-
-        RutaExtra.push_back(NodoOrigen);
-        RutaExtra.push_back(Ruta1[NodoSeleccionado]);
-        RutaExtra.push_back(NodoFinal);
-        Rutas.push_back(RutaExtra);
-        Ruta1 = RutaAux1;
-        Rutas[Drone1] = Ruta1;
-        NodosCortar->push_back(1);
-        FlagCortar = 4;
-        NodosCortar->push_back(FlagCortar);
-        NodosCortar->push_back(UnicoCliente);
-        NumRutasAux++;
-        *NumRutas = NumRutasAux;
-
-    }
-    else{
-        Ruta2 = Rutas[Drone2];
-        RutaAux2 = Ruta2;
-
-        NodosCortar->push_back(Drone2);
-
-        // Se selecciona el primer nodo aleatoriamente
-        NodoSeleccionado = int_rand(1, Ruta1.size()-1);
-        NodoOrigen = Ruta1[0];
-        NodoFinal = Rutas[Drone1][Ruta1.size()-1];
-
-        // Verificar que el nodo seleccionado no sea el mismo al nodo origen
-        while(true){
-            if(Ruta1[NodoSeleccionado] != NodoOrigen){
-                if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoFinal)
-                    NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+            // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+            while(true){
+                if(Ruta1[NodoSeleccionado] != NodoOrigen){
+                    if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoFinal)
+                        NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+                    else
+                        break;
+                }
                 else
-                    break;
+                    NodoSeleccionado = int_rand(1, Ruta1.size()-1);
             }
-            else
-                NodoSeleccionado = int_rand(1, Ruta1.size()-1);
-        }
 
-        NodosCortar->push_back(NodoSeleccionado);
+            NodosCortar->push_back(Drone2);
+            NodosCortar->push_back(NodoSeleccionado);
 
-        if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoOrigen){
+            if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoOrigen){
+                RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
+                UnicoCliente = 1;
+            }
             RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
-            UnicoCliente = 1;
+
+            RutaExtra.push_back(NodoOrigen);
+            RutaExtra.push_back(Ruta1[NodoSeleccionado]);
+            RutaExtra.push_back(NodoFinal);
+            Rutas.push_back(RutaExtra);
+            Ruta1 = RutaAux1;
+            Rutas[Drone1] = Ruta1;
+            NodosCortar->push_back(1);
+            FlagCortar = 4;
+            NodosCortar->push_back(FlagCortar);
+            NodosCortar->push_back(UnicoCliente);
+            NumRutasAux++;
+            *NumRutas = NumRutasAux;
+
         }
-        RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
+        else{
+            Ruta2 = Rutas[Drone2];
+            RutaAux2 = Ruta2;
 
-        Posicion = int_rand(1, Ruta2.size());
+            NodosCortar->push_back(Drone2);
 
-        if(RutaAux2[Posicion] != NodoOrigen && RutaAux2[Posicion] != NodoFinal){
-            if(RutaAux2[Posicion-1] != NodoOrigen){
+            // Se selecciona el primer nodo aleatoriamente
+            NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+            NodoOrigen = Ruta1[0];
+            NodoFinal = Rutas[Drone1][Ruta1.size()-1];
+
+            // Verificar que el nodo seleccionado no sea el mismo al nodo origen
+            while(true){
+                if(Ruta1[NodoSeleccionado] != NodoOrigen){
+                    if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoFinal)
+                        NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+                    else
+                        break;
+                }
+                else
+                    NodoSeleccionado = int_rand(1, Ruta1.size()-1);
+            }
+
+            NodosCortar->push_back(NodoSeleccionado);
+
+            if(Ruta1[NodoSeleccionado-1] == NodoOrigen && Ruta1[NodoSeleccionado+1] == NodoOrigen){
+                RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
+                UnicoCliente = 1;
+            }
+            RutaAux1.erase(RutaAux1.begin()+NodoSeleccionado);
+
+            Posicion = int_rand(1, Ruta2.size());
+
+            if(RutaAux2[Posicion] != NodoOrigen && RutaAux2[Posicion] != NodoFinal){
+                if(RutaAux2[Posicion-1] != NodoOrigen){
+                    RutaAux2.insert(RutaAux2.begin()+Posicion, 0);
+                    RutaAux2.insert(RutaAux2.begin()+Posicion+1, Ruta1[NodoSeleccionado]);
+                    RutaAux2.insert(RutaAux2.begin()+Posicion+2, 0);
+                    // Se inserta un cero a la izquierda y uno a la derecha
+                    FlagCortar = 1;
+                }
+                else{
+                    RutaAux2.insert(RutaAux2.begin()+Posicion, Ruta1[NodoSeleccionado]);
+                    RutaAux2.insert(RutaAux2.begin()+Posicion+1, 0);
+                    // Se inserta un cero a la derecha
+                    FlagCortar = 2;
+                }
+            }
+            
+            else{
                 RutaAux2.insert(RutaAux2.begin()+Posicion, 0);
                 RutaAux2.insert(RutaAux2.begin()+Posicion+1, Ruta1[NodoSeleccionado]);
-                RutaAux2.insert(RutaAux2.begin()+Posicion+2, 0);
-                // Se inserta un cero a la izquierda y uno a la derecha
-                FlagCortar = 1;
+                // Se inserta un cero a la izquierda
+                FlagCortar = 3;
             }
-            else{
-                RutaAux2.insert(RutaAux2.begin()+Posicion, Ruta1[NodoSeleccionado]);
-                RutaAux2.insert(RutaAux2.begin()+Posicion+1, 0);
-                // Se inserta un cero a la derecha
-                FlagCortar = 2;
-            }
-        }
-           
-        else{
-            RutaAux2.insert(RutaAux2.begin()+Posicion, 0);
-            RutaAux2.insert(RutaAux2.begin()+Posicion+1, Ruta1[NodoSeleccionado]);
-            // Se inserta un cero a la izquierda
-            FlagCortar = 3;
-        }
 
-        NodosCortar->push_back(Posicion);
-        NodosCortar->push_back(FlagCortar);
-        NodosCortar->push_back(UnicoCliente);
+            NodosCortar->push_back(Posicion);
+            NodosCortar->push_back(FlagCortar);
+            NodosCortar->push_back(UnicoCliente);
 
-        Ruta1 = RutaAux1;
-        Ruta2 = RutaAux2;
-        Rutas[Drone1] = Ruta1;
-        Rutas[Drone2] = Ruta2;
+            Ruta1 = RutaAux1;
+            Ruta2 = RutaAux2;
+            Rutas[Drone1] = Ruta1;
+            Rutas[Drone2] = Ruta2;
+        }
     }
    
     return Rutas;
@@ -3703,92 +3751,95 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             if(Movimiento == 0){
                 Estadisticas_SA[1]++;
                 RutasOperador = Swap(Rutas, NumRutas_SA, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
-                Temperaturas_SA.push_back(T_actual);
-                Calidades_SA.push_back(NewFuncionEvaluacion);
-                Evaluaciones_SA.push_back(IterTotal);
-                TiemposActuales = NewTiempos;
-                EnergiasActuales = NewEnergias;
-                PesosActuales = NewPesos;
-                Factible = RestriccionesSwap(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                if(NodosSwap[0] != -1){
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+                    Temperaturas_SA.push_back(T_actual);
+                    Calidades_SA.push_back(NewFuncionEvaluacion);
+                    Evaluaciones_SA.push_back(IterTotal);
+                    TiemposActuales = NewTiempos;
+                    EnergiasActuales = NewEnergias;
+                    PesosActuales = NewPesos;
+                    Factible = RestriccionesSwap(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
-                // Mejora la calidad de la solución y es factible
-                if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    Estadisticas_SA[0]++;
-                    *FuncionEvaluacion = NewFuncionEvaluacion;
-                    Rutas = RutasOperador;
-                    ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
-                }
-
-                // Empeora la calidad de la solución y es factible
-                else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
-                    Random = float_rand(0,1);
-                    ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
-                    if(Random < ProbabilidadAceptacion){
+                    // Mejora la calidad de la solución y es factible
+                    if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
                         Estadisticas_SA[0]++;
                         *FuncionEvaluacion = NewFuncionEvaluacion;
                         Rutas = RutasOperador;
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
+
+                    // Empeora la calidad de la solución y es factible
+                    else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
+                        Random = float_rand(0,1);
+                        ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
+                        if(Random < ProbabilidadAceptacion){
+                            Estadisticas_SA[0]++;
+                            *FuncionEvaluacion = NewFuncionEvaluacion;
+                            Rutas = RutasOperador;
+                            ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
+                        }
+                        else{
+                            NewTiempos = TiemposActuales;
+                            NewEnergias = EnergiasActuales;
+                            NewPesos = PesosActuales;
+                        }
+                    }
+
+                    // No es factible
                     else{
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
                     }
                 }
-
-                // No es factible
-                else{
-                    NewTiempos = TiemposActuales;
-                    NewEnergias = EnergiasActuales;
-                    NewPesos = PesosActuales;
-                }
-
             }
 
             // Movimiento: MoverCliente
             else if(Movimiento == 1){
                 Estadisticas_SA[3]++;
                 RutasOperador = MoverCliente(Rutas, NumRutas_SA, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
-                Temperaturas_SA.push_back(T_actual);
-                Calidades_SA.push_back(NewFuncionEvaluacion);
-                Evaluaciones_SA.push_back(IterTotal);
-                TiemposActuales = NewTiempos;
-                EnergiasActuales = NewEnergias;
-                PesosActuales = NewPesos;
-                Factible = RestriccionesMover(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                if(NodosSwap[0] != -1){
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+                    Temperaturas_SA.push_back(T_actual);
+                    Calidades_SA.push_back(NewFuncionEvaluacion);
+                    Evaluaciones_SA.push_back(IterTotal);
+                    TiemposActuales = NewTiempos;
+                    EnergiasActuales = NewEnergias;
+                    PesosActuales = NewPesos;
+                    Factible = RestriccionesMover(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
-                // Mejora la calidad de la solución y es factible
-                if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    Estadisticas_SA[2]++;
-                    *FuncionEvaluacion = NewFuncionEvaluacion;
-                    Rutas = RutasOperador;
-                    ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
-                }
-
-                // Empeora la calidad de la solución y es factible
-                else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
-                    Random = float_rand(0,1);
-                    ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
-                    if(Random < ProbabilidadAceptacion){
+                    // Mejora la calidad de la solución y es factible
+                    if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
                         Estadisticas_SA[2]++;
                         *FuncionEvaluacion = NewFuncionEvaluacion;
                         Rutas = RutasOperador;
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
+
+                    // Empeora la calidad de la solución y es factible
+                    else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
+                        Random = float_rand(0,1);
+                        ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
+                        if(Random < ProbabilidadAceptacion){
+                            Estadisticas_SA[2]++;
+                            *FuncionEvaluacion = NewFuncionEvaluacion;
+                            Rutas = RutasOperador;
+                            ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
+                        }
+                        else{
+                            NewTiempos = TiemposActuales;
+                            NewEnergias = EnergiasActuales;
+                            NewPesos = PesosActuales;
+                        }
+                    }
+
+                    // No es factible
                     else{
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
                     }
-                }
-
-                // No es factible
-                else{
-                    NewTiempos = TiemposActuales;
-                    NewEnergias = EnergiasActuales;
-                    NewPesos = PesosActuales;
                 }
             }
 
@@ -3796,45 +3847,47 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             else if(Movimiento == 2){
                 Estadisticas_SA[5]++;
                 RutasOperador = MoverCliente2(Rutas, NumRutas_SA, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
-                Temperaturas_SA.push_back(T_actual);
-                Calidades_SA.push_back(NewFuncionEvaluacion);
-                Evaluaciones_SA.push_back(IterTotal);
-                TiemposActuales = NewTiempos;
-                EnergiasActuales = NewEnergias;
-                PesosActuales = NewPesos;
-                Factible = RestriccionesMover2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                if(NodosSwap[0] != -1){
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+                    Temperaturas_SA.push_back(T_actual);
+                    Calidades_SA.push_back(NewFuncionEvaluacion);
+                    Evaluaciones_SA.push_back(IterTotal);
+                    TiemposActuales = NewTiempos;
+                    EnergiasActuales = NewEnergias;
+                    PesosActuales = NewPesos;
+                    Factible = RestriccionesMover2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
-                // Mejora la calidad de la solución y es factible
-                if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
-                    Estadisticas_SA[4]++;
-                    *FuncionEvaluacion = NewFuncionEvaluacion;
-                    Rutas = RutasOperador;
-                    ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
-                }
-
-                // Empeora la calidad de la solución y es factible
-                else if(NewFuncionEvaluacion > *FuncionEvaluacion && Factible){
-                    Random = float_rand(0,1);
-                    ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
-                    if(Random < ProbabilidadAceptacion){
+                    // Mejora la calidad de la solución y es factible
+                    if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
                         Estadisticas_SA[4]++;
                         *FuncionEvaluacion = NewFuncionEvaluacion;
                         Rutas = RutasOperador;
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
+
+                    // Empeora la calidad de la solución y es factible
+                    else if(NewFuncionEvaluacion > *FuncionEvaluacion && Factible){
+                        Random = float_rand(0,1);
+                        ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
+                        if(Random < ProbabilidadAceptacion){
+                            Estadisticas_SA[4]++;
+                            *FuncionEvaluacion = NewFuncionEvaluacion;
+                            Rutas = RutasOperador;
+                            ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
+                        }
+                        else{
+                            NewTiempos = TiemposActuales;
+                            NewEnergias = EnergiasActuales;
+                            NewPesos = PesosActuales;
+                        }
+                    }
+
+                    // No es factible
                     else{
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
                     }
-                }
-
-                // No es factible
-                else{
-                    NewTiempos = TiemposActuales;
-                    NewEnergias = EnergiasActuales;
-                    NewPesos = PesosActuales;
                 }
             }
 
@@ -3842,45 +3895,47 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
             else if(Movimiento == 3){
                 Estadisticas_SA[7]++;
                 RutasOperador = CrearRuta(Rutas, NumRutas_SA, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
-                Temperaturas_SA.push_back(T_actual);
-                Calidades_SA.push_back(NewFuncionEvaluacion);
-                Evaluaciones_SA.push_back(IterTotal);
-                TiemposActuales = NewTiempos;
-                EnergiasActuales = NewEnergias;
-                PesosActuales = NewPesos;
-                Factible = RestriccionesCrear(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                if(NodosSwap[0] != -1){
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+                    Temperaturas_SA.push_back(T_actual);
+                    Calidades_SA.push_back(NewFuncionEvaluacion);
+                    Evaluaciones_SA.push_back(IterTotal);
+                    TiemposActuales = NewTiempos;
+                    EnergiasActuales = NewEnergias;
+                    PesosActuales = NewPesos;
+                    Factible = RestriccionesCrear(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
-                // Mejora la calidad de la solución y es factible
-                if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
-                    Estadisticas_SA[6]++;
-                    *FuncionEvaluacion = NewFuncionEvaluacion;
-                    Rutas = RutasOperador;
-                    ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
-                }
-
-                // Empeora la calidad de la solución y es factible
-                else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
-                    Random = float_rand(0,1);
-                    ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
-                    if(Random < ProbabilidadAceptacion){
+                    // Mejora la calidad de la solución y es factible
+                    if(NewFuncionEvaluacion < *FuncionEvaluacion && Factible){
                         Estadisticas_SA[6]++;
                         *FuncionEvaluacion = NewFuncionEvaluacion;
                         Rutas = RutasOperador;
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
+
+                    // Empeora la calidad de la solución y es factible
+                    else if(NewFuncionEvaluacion >= *FuncionEvaluacion && Factible){
+                        Random = float_rand(0,1);
+                        ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
+                        if(Random < ProbabilidadAceptacion){
+                            Estadisticas_SA[6]++;
+                            *FuncionEvaluacion = NewFuncionEvaluacion;
+                            Rutas = RutasOperador;
+                            ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
+                        }
+                        else{
+                            NewTiempos = TiemposActuales;
+                            NewEnergias = EnergiasActuales;
+                            NewPesos = PesosActuales;
+                        }
+                    }
+
+                    // No es factible
                     else{
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
                     }
-                }
-
-                // No es factible
-                else{
-                    NewTiempos = TiemposActuales;
-                    NewEnergias = EnergiasActuales;
-                    NewPesos = PesosActuales;
                 }
             }
 
@@ -3889,47 +3944,49 @@ int Iteraciones_SA, int Iteraciones_CambioT, float Temperatura_Inicial, float Fa
                 Estadisticas_SA[9]++;
                 NumRutasActual = NumRutas_SA;
                 RutasOperador = CrearRuta2(Rutas, &NumRutas_SA, NumDrones, &NodosSwap);
-                NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
-                Temperaturas_SA.push_back(T_actual);
-                Calidades_SA.push_back(NewFuncionEvaluacion);
-                Evaluaciones_SA.push_back(IterTotal);
-                TiemposActuales = NewTiempos;
-                EnergiasActuales = NewEnergias;
-                PesosActuales = NewPesos;
-                Factible = RestriccionesCrear2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
+                if(NodosSwap[0] != -1){
+                    NewFuncionEvaluacion = FuncionEvaluacionTotal(RutasOperador, NumRutas_SA, X_coor, Y_coor, delta, tipo, q);
+                    Temperaturas_SA.push_back(T_actual);
+                    Calidades_SA.push_back(NewFuncionEvaluacion);
+                    Evaluaciones_SA.push_back(IterTotal);
+                    TiemposActuales = NewTiempos;
+                    EnergiasActuales = NewEnergias;
+                    PesosActuales = NewPesos;
+                    Factible = RestriccionesCrear2(RutasOperador, NewTiempos, NewEnergias, NewPesos, NodosSwap, X_coor, Y_coor, ReadyTime, DueTime, Demand, Capacidad, CapacidadEnergetica, delta, tipo);
 
-                // Mejora la calidad de la solución y es factible
-                if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
-                    Estadisticas_SA[8]++;
-                    *FuncionEvaluacion = NewFuncionEvaluacion;
-                    Rutas = RutasOperador;
-                    ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
-                }
-
-                // Empeora la calidad de la solución y es factible
-                else if(NewFuncionEvaluacion > *FuncionEvaluacion && Factible){
-                    Random = float_rand(0,1);
-                    ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
-                    if(Random < ProbabilidadAceptacion){
+                    // Mejora la calidad de la solución y es factible
+                    if(NewFuncionEvaluacion <= *FuncionEvaluacion && Factible){
                         Estadisticas_SA[8]++;
                         *FuncionEvaluacion = NewFuncionEvaluacion;
                         Rutas = RutasOperador;
                         ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
                     }
+
+                    // Empeora la calidad de la solución y es factible
+                    else if(NewFuncionEvaluacion > *FuncionEvaluacion && Factible){
+                        Random = float_rand(0,1);
+                        ProbabilidadAceptacion = exp((*FuncionEvaluacion - NewFuncionEvaluacion) / T_actual);
+                        if(Random < ProbabilidadAceptacion){
+                            Estadisticas_SA[8]++;
+                            *FuncionEvaluacion = NewFuncionEvaluacion;
+                            Rutas = RutasOperador;
+                            ProbAcumuladasExplotacion = ActualizarProbabilidades(&NumeradoresExplotacion, &DenominadorExplotacion, Movimiento);
+                        }
+                        else{
+                            NumRutas_SA = NumRutasActual;
+                            NewTiempos = TiemposActuales;
+                            NewEnergias = EnergiasActuales;
+                            NewPesos = PesosActuales;
+                        }
+                    }
+
+                    // No es factible
                     else{
                         NumRutas_SA = NumRutasActual;
                         NewTiempos = TiemposActuales;
                         NewEnergias = EnergiasActuales;
                         NewPesos = PesosActuales;
                     }
-                }
-
-                // No es factible
-                else{
-                    NumRutas_SA = NumRutasActual;
-                    NewTiempos = TiemposActuales;
-                    NewEnergias = EnergiasActuales;
-                    NewPesos = PesosActuales;
                 }
             }
 

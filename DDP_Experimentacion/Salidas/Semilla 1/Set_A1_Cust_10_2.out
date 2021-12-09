@@ -38,17 +38,17 @@ Pesos Drone 2: 1.5 1.4 1.3 0.9 0.49 1.5 0.9 0.59 0
 
 Estadísticas:
 
-Iteraciones totales: 1080465
+Iteraciones totales: 1081364
 
-Apariciones BalanceoCargaA1: 0/37629
-Apariciones BalanceoCargaA2: 0/37417
-Apariciones BalanceoCargaB: 30/74954
-Apariciones Swap: 0/180453
-Apariciones MoverCliente: 828/208608
-Apariciones MoverCliente2: 0/180273
-Apariciones CrearRuta: 0/180497
-Apariciones CrearRuta2: 0/180634
+Apariciones BalanceoCargaA1: 0/37524
+Apariciones BalanceoCargaA2: 0/37530
+Apariciones BalanceoCargaB: 30/74946
+Apariciones Swap: 0/180606
+Apariciones MoverCliente: 828/208516
+Apariciones MoverCliente2: 0/180661
+Apariciones CrearRuta: 0/180626
+Apariciones CrearRuta2: 0/180955
 
-Tiempo de ejecución: 294 segundos
+Tiempo de ejecución: 226 segundos
 
 ------------------------------------------------------------------------------------------------------------
